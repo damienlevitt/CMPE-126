@@ -8,11 +8,11 @@ stringVector::~stringVector() {
 
 }
 
-unsigned stringVector::size() {
+unsigned stringVector::size() const{
     //return ;
 }
 
-unsigned stringVector::capacity() {
+unsigned stringVector::capacity() const{
     //return ;
 }
 
@@ -20,7 +20,7 @@ void stringVector::reserve(unsigned new_size) {
 
 }
 
-bool stringVector::empty() {
+bool stringVector::empty() const{
     //return ;
 }
 
