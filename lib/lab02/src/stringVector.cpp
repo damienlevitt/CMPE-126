@@ -1,5 +1,5 @@
 #include "../inc/stringVector.h"
-
+using namespace lab2;
 stringVector::stringVector() {
     length;
     allocated_length;
