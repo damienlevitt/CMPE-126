@@ -8,28 +8,28 @@ namespace lab2 {
     }
 
     stringVector::~stringVector() {
-        delete[] data;
+        delete[] data;                                 //Deallocates memory used by data object
     }
 
-    unsigned stringVector::size() const {
+    unsigned stringVector::size() const {              //Returns the length of the array
         return length;
 
         //return ;
     }
 
     unsigned stringVector::capacity() const {
-        return allocated_length;
+        return allocated_length;                        //Returns the amount of space allocated for the array
         //return ;
     }
 
     void stringVector::reserve(unsigned new_size) {
-        std::string *data = new std::string[new_size];
-        delete data;
+        std::string *data = new std::string[new_size];  //Allows the user to choose the allocation size
+        delete data;                                    //The dynamic array grows or shrinks depending on the allocation size given by user.
     }
 
     bool stringVector::empty() const {
         if (length != 0)
-            return true;
+            return true;                                //Returns true if the array is empty
         else
             return false;
 
@@ -37,26 +37,26 @@ namespace lab2 {
     }
 
     void stringVector::append(std::string new_data) {
-        if (empty() == false) {
+        if (empty() == false) {                         //Utilizes the empty function, and will set to 1 if the capacity is zero
             this->reserve(1);
             this->append(new_data);
         }
-        else if (allocated_length == length) {
+        else if (allocated_length == length) {          //Doubles the allocation size
             this->reserve(allocated_length * 2);
             this->append(new_data);
         }
         else{
-            data[length] = new_data;
+            data[length] = new_data;                    //Appends data to the end of the array by data location by 1
             length++;
             return;
     }
 }
 void stringVector::swap(unsigned pos1, unsigned pos2) {
         if (pos1 > allocated_length || pos2 > allocated_length) {
-                throw 0;
+                throw 0;                                //Throws a zero if any of the two positions are out of bounds
         }
         std::string tempswap = data[pos1];
-        data[pos1] = data[pos2];
+        data[pos1] = data[pos2];                        //Uses the temporary variable to swap the positions of pos1 and pos2
         data[pos2] = tempswap;
     }
 
@@ -65,7 +65,7 @@ void stringVector::swap(unsigned pos1, unsigned pos2) {
             return (*this);
         } else {
             delete[] data;
-            length = rhs.length;
+            length = rhs.length;                        //Will take the data from an array and copy it to another
             allocated_length = rhs.allocated_length;
             this->data = new std::string[allocated_length];
             for (int i = 0; i < length; i++) {
@@ -76,7 +76,7 @@ void stringVector::swap(unsigned pos1, unsigned pos2) {
     }
 
     std::string &stringVector::operator[](unsigned position) {
-        if (position >= allocated_length) {
+        if (position >= allocated_length) {             //Will return the reference location back to the string
             throw 0;
         }
         return data[position];
@@ -86,8 +86,8 @@ void stringVector::swap(unsigned pos1, unsigned pos2) {
     void stringVector::sort() {
         std::string string1;
         for (int i = (length - 1); i > 0; i--) {
-            for (int n = 0; n < i; n++) {
-                if (data[n].compare(data[n + 1]) > 0) {
+            for (int n = 0; n < i; n++) {              //Uses bubble sorting to switch any greater number with the lesser number in string number
+                if (data[n].compare(data[n + 1]) > 0) {//Repeats until the larger numbers are at the end and the lesser numbers are at the beginning of the array.
                     string1 = data[n];
                     data[n] = data[n + 1];
                     data[n + 1] = string1;
