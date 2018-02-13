@@ -6,7 +6,7 @@
 
 class stringVector {
 private:
-    std::string * data;
+    std::string *data;
     unsigned length;
     unsigned allocated_length;
 

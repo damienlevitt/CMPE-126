@@ -1,9 +1,9 @@
 #include "gtest/gtest.h"
 #include "stringVector.h"
+namespace lab2
 
 class Lab02Fixture : public ::testing::Test {
-#include "gtest/gtest.h"
-#include "stringVector.h"
+
 
     TEST(stringVector,constructorTest) {
         stringVector hw0;
