@@ -2,8 +2,8 @@
 namespace lab2 {
 
     stringVector::stringVector() {
-        length;
-        allocated_length;
+        length = 0;
+        allocated_length = 0;
         data = nullptr;
     }
 
@@ -23,13 +23,22 @@ namespace lab2 {
     }
 
     void stringVector::reserve(unsigned new_size) {
-        std::string *data = new std::string[new_size];  //Allows the user to choose the allocation size
-        delete data;                                    //The dynamic array grows or shrinks depending on the allocation size given by user.
+        auto *tempArray = new std::string[new_size];  //Allows the user to choose the allocation size
+            for(int count = 0; count < new_size && count <length; count++){
+                tempArray[count] = data[count];
+            }
+        if(length > new_size){                        //If the length is greater than the new size the arrray will shrink
+            length = new_size;
+        }
+        allocated_length = new_size;                   //Sets the allocated memory to the new size
+        delete[] data;                                 //Deletes the values in data and stores in TempArray until
+        data = tempArray;                              //Sets the data array to the temporary tempArray
     }
 
     bool stringVector::empty() const {
-        if (length != 0)
-            return true;                                //Returns true if the array is empty
+        if (length == 0){
+            return true;
+        }                                                //Returns true if the array is empty
         else
             return false;
 
@@ -37,7 +46,7 @@ namespace lab2 {
     }
 
     void stringVector::append(std::string new_data) {
-        if (empty() == false) {                         //Utilizes the empty function, and will set to 1 if the capacity is zero
+        if (allocated_length == 0) {                         //Utilizes the empty function, and will set to 1 if the capacity is zero
             this->reserve(1);
             this->append(new_data);
         }
