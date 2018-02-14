@@ -61,7 +61,7 @@ namespace lab2 {
     }
 }
 void stringVector::swap(unsigned pos1, unsigned pos2) {
-        if (pos1 > allocated_length || pos2 > allocated_length) {
+        if (pos1 > length || pos2 > length) {
                 throw 0;                                //Throws a zero if any of the two positions are out of bounds
         }
         std::string tempstring = data[pos1];
