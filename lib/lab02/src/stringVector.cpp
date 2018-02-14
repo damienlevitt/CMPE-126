@@ -64,9 +64,9 @@ void stringVector::swap(unsigned pos1, unsigned pos2) {
         if (pos1 > allocated_length || pos2 > allocated_length) {
                 throw 0;                                //Throws a zero if any of the two positions are out of bounds
         }
-        std::string tempswap = data[pos1];
+        std::string tempstring = data[pos1];
         data[pos1] = data[pos2];                        //Uses the temporary variable to swap the positions of pos1 and pos2
-        data[pos2] = tempswap;
+        data[pos2] = tempstring;
     }
 
     stringVector &stringVector::operator=(stringVector const &rhs) {
