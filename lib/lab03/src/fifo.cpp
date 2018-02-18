@@ -2,7 +2,8 @@
 
 namespace lab3{
     fifo::fifo() {
-    //Reserve 100 spaces in fifo_storage
+        fifo_storage.lab2::reserve(100);
+        front_index =
     }
 
     fifo::fifo(std::string input_string) {
