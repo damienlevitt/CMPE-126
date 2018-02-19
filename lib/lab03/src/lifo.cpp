@@ -13,7 +13,7 @@ namespace lab3{
     }
 
     lifo::lifo(const lifo &original) {
-
+        index=original.index;
     }
 
     lifo::~lifo() {
@@ -23,6 +23,7 @@ namespace lab3{
     lifo &lifo::operator=(const lifo &right) {
         for (int i = 0; i < index; i++) {
             this->lifo_storage[i] = right.lifo_storage[i];
+        }
     }
 
     bool lifo::is_empty() const {

@@ -3,7 +3,8 @@
 namespace lab3{
     fifo::fifo() {
         fifo_storage.lab2::reserve(100);
-        front_index =
+        front_index = 0;
+        back_index = 0;
     }
 
     fifo::fifo(std::string input_string) {
@@ -15,11 +16,11 @@ namespace lab3{
     }
 
     fifo::~fifo() {
-
+        delete[] fifo;
     }
 
     fifo &fifo::operator=(const fifo &right) {
-        //return <#initializer#>;
+
     }
 
     bool fifo::is_empty() const {
