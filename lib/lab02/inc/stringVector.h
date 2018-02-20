@@ -29,7 +29,7 @@ namespace lab2 {
 
         stringVector &operator=(stringVector const &rhs);
 
-        std::string &operator[](unsigned position);
+        std::string &operator[](unsigned position) const;
 
         void sort();
     };

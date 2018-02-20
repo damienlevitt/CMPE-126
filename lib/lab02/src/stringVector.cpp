@@ -84,7 +84,7 @@ void stringVector::swap(unsigned pos1, unsigned pos2) {
         //return ;
     }
 
-    std::string &stringVector::operator[](unsigned position) {
+    std::string &stringVector::operator[](unsigned position) const {
         if (position >= allocated_length) {             //Will return the reference location back to the string
             throw 0;
         }

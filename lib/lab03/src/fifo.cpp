@@ -2,44 +2,69 @@
 
 namespace lab3{
     fifo::fifo() {
-        fifo_storage.lab2::reserve(100);
+        fifo_storage.reserve(100);
         front_index = 0;
         back_index = 0;
     }
 
     fifo::fifo(std::string input_string) {
-
+        fifo_storage.reserve(100);
+        front_index = 0;
+        back_index = 1;
+        fifo_storage.append(input_string);
     }
 
     fifo::fifo(const fifo &original) {
-
+        fifo_storage.reserve(100);
+        back_index = original.back_index;
+        front_index = original.front_index;
+        for(int n = 0; n < back_index; n++){
+            fifo_storage[n] = original.fifo_storage[n];
+        }
     }
 
     fifo::~fifo() {
-        delete[] fifo;
+        delete[] fifo_storage;
+        front_index = 0;
+        back_index = 0;
     }
 
     fifo &fifo::operator=(const fifo &right) {
-
+        if(&right == this){
+            return(*this);
+        }
+        fifo_storage.reserve(right.fifo_storage.capacity());
+        back_index = right.back_index;
+        front_index = right.front_index;
+        for(int n = 0; n , right.fifo_storage.size(); n++){
+            fifo_storage[n] = right.fifo_storage[n];
+        }
     }
 
     bool fifo::is_empty() const {
-        //return false;
+        if(front_index == back_index){
+            return true;
+        }
+        else
+            return false;
     }
 
     unsigned fifo::size() const {
-        //return 0;
+        if(!is_empty()){
+            return back_index - front_index;
+        }
     }
 
     std::string fifo::top() const {
-        //return std::__cxx11::string();
+        return fifo_storage[front_index];
     }
 
     void fifo::enqueue(std::string input) {
-
+        fifo_storage.append(input);
+        ++back_index;
     }
 
     void fifo::dequeue() {
-
+        ++front_index;
     }
 }
