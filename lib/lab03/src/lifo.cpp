@@ -8,8 +8,8 @@ namespace lab3{
 
     lifo::lifo(std::string input_string) {
         lab2::stringVector lifo_storage;            //Does the same as the default constructor
-        lifo_storage.lab2::reserve(100);
-        lifo_storage.lab2::append(input_string);
+        lifo_storage.reserve(100);
+        lifo_storage.append(input_string);
     }
 
     lifo::lifo(const lifo &original) {
@@ -21,7 +21,7 @@ namespace lab3{
     }
 
     lifo::~lifo() {
-        delete[] lifo_storage;
+        index = -1;
     }
 
     lifo &lifo::operator=(const lifo &right) {
