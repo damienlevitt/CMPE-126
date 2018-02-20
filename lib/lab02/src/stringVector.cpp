@@ -91,6 +91,10 @@ void stringVector::swap(unsigned pos1, unsigned pos2) {
         return data[position];
     }
 
+    void stringVector::setSize(unsigned new_size) {
+        length = new_size;
+        if(allocated_length != new_size) reserve(new_size);
+    }
 
     void stringVector::sort() {
         std::string string1;

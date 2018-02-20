@@ -24,7 +24,7 @@ namespace lab3{
     }
 
     fifo::~fifo() {
-        fifo_storage.reserve(0);
+        fifo_storage.setSize(0);
         front_index = 0;
         back_index = 0;
     }
