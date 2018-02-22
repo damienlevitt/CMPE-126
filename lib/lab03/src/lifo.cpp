@@ -1,5 +1,6 @@
 #include "lifo.h"
 
+
 namespace lab3{
     lifo::lifo() {
         lifo_storage.reserve(100);            //Allocated 100 spaced in array lifo_storage.
@@ -34,7 +35,7 @@ namespace lab3{
         }
     }
 
-    bool lifo::is_empty() const {
+    bool lifo::is_empty() {
         if (index >= 1) {
             return false;
         }
@@ -42,7 +43,7 @@ namespace lab3{
             return true;
     }
 
-    unsigned lifo::size() const {
+    int lifo::size()  {
         if(!is_empty()) {
             return index;
         }
@@ -50,7 +51,7 @@ namespace lab3{
             return 0;
     }
 
-    std::string lifo::top() const {
+    std::string lifo::top() {
        return lifo_storage[index-1];
     }
 

@@ -41,7 +41,7 @@ namespace lab3{
         }
     }
 
-    bool fifo::is_empty() const {
+    bool fifo::is_empty() {
         if(front_index == back_index){
             return true;
         }
@@ -49,13 +49,13 @@ namespace lab3{
             return false;
     }
 
-    unsigned fifo::size() const {
+    int fifo::size() {
         if(!is_empty()){
             return back_index - front_index;
         }
     }
 
-    std::string fifo::top() const {
+    std::string fifo::top()  {
         return fifo_storage[front_index];
     }
 
