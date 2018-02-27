@@ -4,6 +4,9 @@
 #include "calculator.h"
 namespace lab4 {
     void calculator::parse_to_infix(std::string &input_expression) {
+        lab3::fifo();
+
+
 
     }
 
