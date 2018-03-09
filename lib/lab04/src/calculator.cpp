@@ -84,13 +84,37 @@ namespace lab4 {
 
 
     // AUXILIARY FUNCTIONS
-    bool is_number(std::string input_string);
+    bool is_number(std::string input_string){
+        if (input_string >= "0" && input_string <= "999"){
+            if(input_string == "-" || input_string == "+" || input_string == "/" || input_string == "*" || input_string == "(" || input_string == ")"){
+                return false;
+            }
+            return true;
+        }
+    }
 
-    bool is_operator(std::string input_string);
+    bool is_operator(std::string input_string){
+        if(input_string == "+" || input_string == "-" || input_string == "*" || input_string == "/") {
+            return true;
+        }
+        return false;
+    }
 
     int get_number(std::string input_string);
 
     std::string get_operator(std::string input_string);
 
-    int operator_priority(std::string operator_in);
+    int operator_priority(std::string operator_in){
+        int n;
+        if(operator_in == "+" || "-"){
+            n = 1;
+        }
+        else if (operator_in == "*" || "/"){
+            n = 2;
+        }
+        else if (operator_in == "^"){
+            n = 3;
+        }
+        return n;
+    }
 }
