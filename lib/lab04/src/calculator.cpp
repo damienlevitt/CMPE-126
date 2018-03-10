@@ -7,31 +7,55 @@ bool is_operator(std::string input_string);
 
 namespace lab4 {
     void calculator::parse_to_infix(std::string &input_expression) {
-        std::string temp = "";
-        int front_index = 0;
-        int back_index = 0;
-        int input_size = input_expression.size();
-        while (back_index < input_size) {
-            if (input_expression[input_size] == '') {
-                if (front_index == 0) {
-                    back_index++;
-                }
-                else {
-                    infix_expression.enqueue(temp);
-                    temp = "";
-                    back_index++;
-                    front_index = 0;
-                }
+        bool is_number(std::string input_string);
+        bool is_operator(std::string input_string);
+        int size = 0;
+        int op = 0;
+        int infix_size = 0;
+        std::string temp[input_expression.size()];
+        for (std::string::iterator it = input_expression.begin(); it != input_expression.end(); ++it) {
+            //do_things_with(*it);
+            temp[size] = *it;
+            size++;
+        }
+        for (int i = 0; i < size; i++) {
+            if (temp[i] == " ") {
+                i++;
+            } else if (i == size - 1) {
+                infix_expression.enqueue(temp[i]);
+                infix_size++;
             }
-                else {
-                    temp+=input_expression[back_index];
-                    back_index++;
-                    front_index++;
-
+            if (i != size - 1 && !is_number(temp[i])) {
+                infix_expression.enqueue(temp[i]);
+                infix_size++;
+            }
+            if (i != size - 1 && is_number(temp[i]) &&
+                !is_number(temp[i + 1])) {
+                infix_expression.enqueue(temp[i]);
+                infix_size++;
+            }
+            if (i != size - 1 && is_number(temp[i]) && is_number(temp[i + 1])) {
+                op = i;
+                if (op == size - 2) {
+                    op = op + 2;
+                }
+                if (op == size - 3) {
+                    op = op + 3;
+                }
+                if (op != size) {
+                    while (op != size - 1 && is_number(temp[op])) {
+                        op++;
+                    }
+                }
+                std::string int_temp;
+                for (int z = i; z < op; z++) {
+                    int_temp += temp[i++];
+                }
+                i = op - 1;
+                infix_expression.enqueue(int_temp);
+                infix_size++;
             }
         }
-
-
     }
 
     void calculator::convert_to_postfix(lab3::fifo infix_expression) {
@@ -90,40 +114,37 @@ namespace lab4 {
         bool is_number(std::string input_string);
         bool is_operator(std::string input_string);
         lab3::lifo final_stack;
-        while(!postfix_expression.is_empty()){
-            if (is_number(postfix_expression.top())){
+        while (!postfix_expression.is_empty()) {
+            if (is_number(postfix_expression.top())) {
                 final_stack.push(postfix_expression.top());
                 postfix_expression.dequeue();
-            else if (is_operator(postfix_expression.top())){
-                    std::string tempOp = postfix_expression.top();
-                    postfix_expression.dequeue();
-                    int temp = std::stoi(final_stack.top());
-                    final_stack.pop();
-                    int temp1 = std::stoi(final_stack.top());
-                    final_stack.pop();
-            if (tempOp == "/"){
+            } else if (is_operator(postfix_expression.top())) {
+                std::string tempOp = postfix_expression.top();
+                postfix_expression.dequeue();
+                int temp = std::stoi(final_stack.top());
+                final_stack.pop();
+                int temp1 = std::stoi(final_stack.top());
+                final_stack.pop();
+                if (tempOp == "/") {
                     answer = temp1 / temp;
                     std::string in = std::to_string(answer);
                     final_stack.push(in);
-                    }
-             else if (tempOp == "*") {
-                answer = temp1 * temp;
-                std::string in = std::to_string(answer);
-                final_stack.push(in);
-            }
-            else if(tempOp == "+"){
-                answer = temp1 +temp;
-                std::string in = std::to_string(answer);
-                final_stack.push(in);
-            }
-            else if(tempOp == "-"){
-                answer = temp1 - temp;
-                std::string in = std::to_string(answer);
-                final_stack.push(in);
-            }
+                } else if (tempOp == "*") {
+                    answer = temp1 * temp;
+                    std::string in = std::to_string(answer);
+                    final_stack.push(in);
+                } else if (tempOp == "+") {
+                    answer = temp1 + temp;
+                    std::string in = std::to_string(answer);
+                    final_stack.push(in);
+                } else if (tempOp == "-") {
+                    answer = temp1 - temp;
+                    std::string in = std::to_string(answer);
+                    final_stack.push(in);
                 }
             }
         }
+
         return 0;
     }
 
