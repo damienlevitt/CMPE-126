@@ -3,7 +3,6 @@
 #include "calculator.h"
 int operator_priority(std::string operator_in);
 bool is_number (std::string input_string);
-int evaluator(std::string op, int a, int b);
 bool is_operator(std::string input_string);
 
 namespace lab4 {
@@ -36,34 +35,36 @@ namespace lab4 {
     }
 
     void calculator::convert_to_postfix(lab3::fifo infix_expression) {
-         lab3::lifo op_stack;
-        std::string current_token;
-        while(!infix_expression.is_empty()){
-            current_token = infix_expression.top();
-            infix_expression.dequeue();
-            if (is_number(current_token)){
-                postfix_expression.enqueue(current_token);
+        lab3::fifo infix_copy(infix_expression);
+        lab3::lifo opStack;
+        std::string temp;
+        while(!infix_copy.is_empty()) {
+            temp = infix_copy.top();
+            if (is_number(temp)){
+                postfix_expression.enqueue(temp);
             }
-            else if (is_operator(current_token)) {
-                while (!op_stack.is_empty() && operator_priority(current_token) <= operator_priority(op_stack)) {
-                    postfix_expression.enqueue(op_stack);
-                    op_stack.pop();
+            if(is_operator(temp)) {
+                while (!opStack.is_empty() && (operator_priority(opStack.top()) >= operator_priority(temp)) && (opStack.top() != "(a")){
+                    postfix_expression.enqueue(opStack.top());
+                    opStack.pop();
                 }
-                op_stack.push(current_token);
+                opStack.push(temp);
             }
-            if (current_token == "(") {
-                op_stack.push(current_token);
+            if (temp == "(") {
+                opStack.push(temp);
             }
-            else if (current_token == ")") {
-               while (op_stack.top() != "(") {
-                   postfix_expression.enqueue(op_stack.top());
-                   op_stack.pop();
-               }
-               }
-                op_stack.pop();
+            if (temp == ")") {
+                while (opStack.top() != "("){
+                    postfix_expression.enqueue(opStack.top());
+                    opStack.pop();
+                }
+                opStack.pop();
             }
-            while (op_stack.is_empty()) {
-                postfix_expression.enqueue(op_stack.top());
+            infix_copy.dequeue();
+        }
+        while(!opStack.is_empty()) {
+            postfix_expression.enqueue(opStack.top());
+            opStack.pop();
         }
     }
 
