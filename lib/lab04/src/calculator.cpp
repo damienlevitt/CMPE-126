@@ -1,6 +1,11 @@
 
 #include <string>
 #include "calculator.h"
+int operator_priority(std::string operator_in);
+bool is_number (std::string input_string);
+int evaluator(std::string op, int a, int b);
+bool is_operator(std::string input_string);
+
 namespace lab4 {
     void calculator::parse_to_infix(std::string &input_expression) {
         std::string temp = "";
@@ -67,18 +72,71 @@ namespace lab4 {
     }
 
     calculator::calculator(std::string &input_expression) {
-
+        parse_to_infix(input_expression);
+        convert_to_postfix(infix_expression);
     }
 
     std::istream &operator>>(std::istream &stream, calculator &RHS) {
+        std::string input;
+        getline(stream, input);
+        RHS.parse_to_infix(input);
+        RHS.convert_to_postfix(RHS.infix_expression);
         return stream;
     }
 
     int lab4::calculator::calculate() {
+        int answer;
+        bool is_number(std::string input_string);
+        bool is_operator(std::string input_string);
+        lab3::lifo final_stack;
+        while(!postfix_expression.is_empty()){
+            if (is_number(postfix_expression.top())){
+                final_stack.push(postfix_expression.top());
+                postfix_expression.dequeue();
+            else if (is_operator(postfix_expression.top())){
+                    std::string tempOp = postfix_expression.top();
+                    postfix_expression.dequeue();
+                    int temp = std::stoi(final_stack.top());
+                    final_stack.pop();
+                    int temp1 = std::stoi(final_stack.top());
+                    final_stack.pop();
+            if (tempOp == "/"){
+                    answer = temp1 / temp;
+                    std::string in = std::to_string(answer);
+                    final_stack.push(in);
+                    }
+             else if (tempOp == "*") {
+                answer = temp1 * temp;
+                std::string in = std::to_string(answer);
+                final_stack.push(in);
+            }
+            else if(tempOp == "+"){
+                answer = temp1 +temp;
+                std::string in = std::to_string(answer);
+                final_stack.push(in);
+            }
+            else if(tempOp == "-"){
+                answer = temp1 - temp;
+                std::string in = std::to_string(answer);
+                final_stack.push(in);
+            }
+                }
+            }
+        }
         return 0;
     }
 
     std::ostream &operator<<(std::ostream &stream, calculator &RHS) {
+        lab3::fifo temp = RHS.infix_expression;
+        lab3::fifo temp2 = RHS.postfix_expression;
+        while(!temp.is_empty()) {
+            stream << temp.top();
+            temp.dequeue();
+        }
+        while(!temp2.is_empty()){
+            stream << temp2.top();
+            temp2.dequeue();
+        }
         return stream;
     }
 
