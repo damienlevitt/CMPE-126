@@ -52,4 +52,8 @@ namespace lab5 {
     void linked_list::sort() {
 
     }
+
+    std::string linked_list::get_value_at(unsigned location) {
+
+    }
 }
