@@ -101,11 +101,7 @@ namespace lab4 {
     }
 
     std::istream &operator>>(std::istream &stream, calculator &RHS) {
-        std::string input;
-        getline(stream, input);
-        RHS.parse_to_infix(input);
-        RHS.convert_to_postfix(RHS.infix_expression);
-        return stream;
+
     }
 
     int lab4::calculator::calculate() {
@@ -163,33 +159,33 @@ namespace lab4 {
 
 
     // AUXILIARY FUNCTIONS
-    bool is_number(std::string input_string){
+    bool is_number(std::string const input_string){
         if (input_string >= "0" && input_string <= "999"){
             if(input_string == "-" || input_string == "+" || input_string == "/" || input_string == "*" || input_string == "(" || input_string == ")"){
                 return false;
-            }
+            }                                               //Determines if there are numbers in input_string by
             return true;
         }
     }
 
-    bool is_operator(std::string input_string){
+    bool is_operator(std::string const input_string){
         if(input_string == "+" || input_string == "-" || input_string == "*" || input_string == "/") {
             return true;
         }
-        return false;
+        return false;                                       // Just determines if there is an operator in input_string.
     }
 
     int get_number(std::string input_string);
 
     std::string get_operator(std::string input_string);
 
-    int operator_priority(std::string operator_in){
+    int operator_priority(std::string const operator_in){
         int n;
         if(operator_in == "+" || "-"){
             n = 1;
         }
         else if (operator_in == "*" || "/"){
-            n = 2;
+            n = 2;                                  //Will give precedence to the operators.
         }
         else if (operator_in == "^"){
             n = 3;

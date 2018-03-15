@@ -7,8 +7,11 @@
 
 namespace lab4{
     class calculator{
+        lab3::fifo infix_expression;
         lab3::fifo postfix_expression;
-
+        void parse_to_infix(std::string &input_expression);
+        //PRIVATE function used for converting input string into infix notation
+        void convert_to_postfix(lab3::fifo infix_expression);
         //PRIVATE function used for converting infix FIFO to postfix
     public:
         calculator();   //Default constructor
@@ -17,12 +20,6 @@ namespace lab4{
 
         int calculate(); //Return the calculation of the postfix expression
         friend std::ostream& operator<<(std::ostream& stream, calculator& RHS); //Stream out overload. Should return in the format "Infix: #,#,#,#\nPostfix: #,#,#,#"
-        void parse_to_infix(std::string &input_expression);
-
-        //PRIVATE function used for converting input string into infix notation
-        void convert_to_postfix(lab3::fifo infix_expression);
-
-        lab3::fifo infix_expression;
     };
 }
 
