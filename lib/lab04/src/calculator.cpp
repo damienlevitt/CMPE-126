@@ -8,7 +8,6 @@ bool is_operator(std::string input_string);
 namespace lab4 {
     void calculator::parse_to_infix(std::string &input_expression) {
         bool is_number(std::string input_string);
-        bool is_operator(std::string input_string);
         int size = 0;
         int op = 0;
         int infix_size = 0;
@@ -28,8 +27,7 @@ namespace lab4 {
                 infix_expression.enqueue(temp[i]);
                 infix_size++;
             }
-            if (i != size - 1 && is_number(temp[i]) &&
-                !is_number(temp[i + 1])) {
+            if (i != size - 1 && is_number(temp[i]) && !is_number(temp[i + 1])) {
                 infix_expression.enqueue(temp[i]);
                 infix_size++;
             }
@@ -59,7 +57,7 @@ namespace lab4 {
 
     void calculator::convert_to_postfix(lab3::fifo infix_expression) {
         lab3::fifo infix_copy(infix_expression);
-        lab3::lifo opStack;
+        lab3::lifo OperatorStack;
         std::string temp;
         while(!infix_copy.is_empty()) {
             temp = infix_copy.top();
@@ -67,27 +65,27 @@ namespace lab4 {
                 postfix_expression.enqueue(temp);
             }
             if(is_operator(temp)) {
-                while (!opStack.is_empty() && (operator_priority(opStack.top()) >= operator_priority(temp)) && (opStack.top() != "(a")){
-                    postfix_expression.enqueue(opStack.top());
-                    opStack.pop();
+                while (!OperatorStack.is_empty() && (operator_priority(OperatorStack.top()) >= operator_priority(temp)) && (OperatorStack.top() != "(a")){
+                    postfix_expression.enqueue(OperatorStack.top());
+                    OperatorStack.pop();
                 }
-                opStack.push(temp);
+                OperatorStack.push(temp);
             }
             if (temp == "(") {
-                opStack.push(temp);
+                OperatorStack.push(temp);
             }
             if (temp == ")") {
-                while (opStack.top() != "("){
-                    postfix_expression.enqueue(opStack.top());
-                    opStack.pop();
+                while (OperatorStack.top() != "("){
+                    postfix_expression.enqueue(OperatorStack.top());
+                    OperatorStack.pop();
                 }
-                opStack.pop();
+                OperatorStack.pop();
             }
             infix_copy.dequeue();
         }
-        while(!opStack.is_empty()) {
-            postfix_expression.enqueue(opStack.top());
-            opStack.pop();
+        while(!OperatorStack.is_empty()) {
+            postfix_expression.enqueue(OperatorStack.top());
+            OperatorStack.pop();
         }
     }
 
@@ -101,7 +99,14 @@ namespace lab4 {
     }
 
     std::istream &operator>>(std::istream &stream, calculator &RHS) {
-
+        std::string temporary = " ";
+        lab3::fifo infix_expression;
+        while(stream.peek() != EOF){
+            temporary = stream.get();
+            RHS.parse_to_infix(temporary);
+            RHS.convert_to_postfix(infix_expression);
+            return stream;
+        }
     }
 
     int lab4::calculator::calculate() {
