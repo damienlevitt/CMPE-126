@@ -1,13 +1,13 @@
-
+#include <iostream>
 #include <string>
 #include "calculator.h"
-int operator_priority(std::string operator_in);
-bool is_number (std::string input_string);
-bool is_operator(std::string input_string);
-
 namespace lab4 {
+    int operator_priority(std::string operator_in);
+    bool is_number (std::string input_string);
+    bool is_operator(std::string input_string);
+
+
     void calculator::parse_to_infix(std::string &input_expression) {
-        bool is_number(std::string input_string);
         int size = 0;
         int op = 0;
         int infix_size = 0;
@@ -58,23 +58,23 @@ namespace lab4 {
     void calculator::convert_to_postfix(lab3::fifo infix_expression) {
         lab3::fifo infix_copy(infix_expression);
         lab3::lifo OperatorStack;
-        std::string temp;
+        std::string temporary;
         while(!infix_copy.is_empty()) {
-            temp = infix_copy.top();
-            if (is_number(temp)){
-                postfix_expression.enqueue(temp);
+            temporary = infix_copy.top();
+            if (is_number(temporary)){
+                postfix_expression.enqueue(temporary);
             }
-            if(is_operator(temp)) {
-                while (!OperatorStack.is_empty() && (operator_priority(OperatorStack.top()) >= operator_priority(temp)) && (OperatorStack.top() != "(a")){
+            if(is_operator(temporary)) {
+                while (!OperatorStack.is_empty() && (operator_priority(OperatorStack.top()) >= operator_priority(temporary)) && (OperatorStack.top() != "(a")){
                     postfix_expression.enqueue(OperatorStack.top());
                     OperatorStack.pop();
                 }
-                OperatorStack.push(temp);
+                OperatorStack.push(temporary);
             }
-            if (temp == "(") {
-                OperatorStack.push(temp);
+            if (temporary == "(") {
+                OperatorStack.push(temporary);
             }
-            if (temp == ")") {
+            if (temporary == ")") {
                 while (OperatorStack.top() != "("){
                     postfix_expression.enqueue(OperatorStack.top());
                     OperatorStack.pop();
@@ -110,7 +110,7 @@ namespace lab4 {
     }
 
     int lab4::calculator::calculate() {
-        int answer;
+        int answer = 0;
         bool is_number(std::string input_string);
         bool is_operator(std::string input_string);
         lab3::lifo final_stack;
@@ -145,7 +145,7 @@ namespace lab4 {
             }
         }
 
-        return 0;
+        return answer;
     }
 
     std::ostream &operator<<(std::ostream &stream, calculator &RHS) {

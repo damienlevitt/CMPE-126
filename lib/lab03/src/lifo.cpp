@@ -22,7 +22,7 @@ namespace lab3{
     }
 
     lifo::~lifo() {
-        index = -1;
+        index = 0;
     }
 
     lifo &lifo::operator=(const lifo &right) {
@@ -52,7 +52,7 @@ namespace lab3{
     }
 
     std::string lifo::top() {
-       return lifo_storage[index-1];
+       return lifo_storage[index];
     }
 
     void lifo::push(std::string input) {
