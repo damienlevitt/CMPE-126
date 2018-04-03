@@ -12,8 +12,8 @@ namespace lab4 {
         int op = 0;
         int infix_size = 0;
         std::string temp[input_expression.size()];
-        for (std::string::iterator it = input_expression.begin(); it != input_expression.end(); ++it) {
-            temp[size] = *it;
+        for (std::string::iterator count = input_expression.begin(); count != input_expression.end(); ++count) {
+            temp[size] = *count;
             size++;
         }
         for (int i = 0; i < size; i++) {

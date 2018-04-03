@@ -23,6 +23,7 @@ namespace lab3{
 
     lifo::~lifo() {
         index = 0;
+
     }
 
     lifo &lifo::operator=(const lifo &right) {
@@ -61,6 +62,6 @@ namespace lab3{
     }
 
     void lifo::pop() {
-        --index;
+        index;
     }
 }
