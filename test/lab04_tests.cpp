@@ -43,7 +43,7 @@ TEST(calculator, multTest){
     EXPECT_EQ(48, mult.calculate());
 }
 TEST(calculator, quiz){
-    std::string F = "2-(3*4/6)+10";
+    std::string F = "2-(3*4/6)+1";
     lab4::calculator tues(F);
-    EXPECT_EQ(10,tues.calculate());
+    EXPECT_EQ(1,tues.calculate());
 }

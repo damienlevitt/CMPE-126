@@ -65,7 +65,7 @@ namespace lab4 {
                 postfix_expression.enqueue(temporary);
             }
             if(is_operator(temporary)) {
-                while (!OperatorStack.is_empty() && (operator_priority(OperatorStack.top()) >= operator_priority(temporary)) && (OperatorStack.top() != "(a")){
+                while (!OperatorStack.is_empty() && (operator_priority(OperatorStack.top()) >= operator_priority(temporary)) && (OperatorStack.top() != "(")){
                     postfix_expression.enqueue(OperatorStack.top());
                     OperatorStack.pop();
                 }
