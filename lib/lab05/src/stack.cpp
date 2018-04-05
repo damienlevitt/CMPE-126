@@ -24,7 +24,7 @@ namespace lab5{
         return false;
     }
 
-    unsigned stack::queueSize() const {
+    unsigned stack::stackSize() const {
         return 0;
     }
 
