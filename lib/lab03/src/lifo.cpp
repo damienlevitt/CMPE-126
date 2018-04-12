@@ -15,7 +15,7 @@ namespace lab3{
 
     lifo::lifo(const lifo &original) {
         lifo_storage.reserve(100);
-        index=original.index;
+        index = original.index;
         for(int n = 0; n < index; n++){
             lifo_storage[n] = original.lifo_storage[n];
         }
@@ -23,7 +23,6 @@ namespace lab3{
 
     lifo::~lifo() {
         index = 0;
-
     }
 
     lifo &lifo::operator=(const lifo &right) {
@@ -53,7 +52,7 @@ namespace lab3{
     }
 
     std::string lifo::top() {
-       return lifo_storage[index];
+       return lifo_storage[index-1];
     }
 
     void lifo::push(std::string input) {
@@ -62,6 +61,6 @@ namespace lab3{
     }
 
     void lifo::pop() {
-        index;
+        --index;
     }
 }
