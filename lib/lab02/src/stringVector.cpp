@@ -8,7 +8,9 @@ namespace lab2 {
     }
 
     stringVector::~stringVector() {
-        delete[] data;                                 //Deallocates memory used by data object
+        delete[] data;
+        data = nullptr;
+                                  //Deallocates memory used by data object
     }
 
     unsigned stringVector::size() const {              //Returns the length of the array

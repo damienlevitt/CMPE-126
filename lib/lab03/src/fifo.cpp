@@ -59,8 +59,8 @@ namespace lab3{
         return fifo_storage[front_index];
     }
 
-    void fifo::enqueue(std::string input) {
-        fifo_storage.append(input);
+    void fifo::enqueue(std::string input_string) {
+        fifo_storage.append(input_string);
         ++back_index;
     }
 

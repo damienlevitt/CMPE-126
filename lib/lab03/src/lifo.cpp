@@ -1,6 +1,5 @@
 #include "lifo.h"
 
-
 namespace lab3{
     lifo::lifo() {
         lifo_storage.reserve(100);            //Allocated 100 spaced in array lifo_storage.
@@ -23,6 +22,8 @@ namespace lab3{
 
     lifo::~lifo() {
         index = 0;
+        lifo_storage.~stringVector();
+
     }
 
     lifo &lifo::operator=(const lifo &right) {
