@@ -1,5 +1,7 @@
 #include "fifo.h"
 
+#include <utility>
+
 namespace lab3{
     fifo::fifo() {
         fifo_storage.reserve(100);
@@ -9,9 +11,9 @@ namespace lab3{
 
     fifo::fifo(std::string input_string) {
         fifo_storage.reserve(100);
+        fifo_storage.append(input_string);
         front_index = 0;
         back_index = 1;
-        fifo_storage.append(input_string);
     }
 
     fifo::fifo(const fifo &original) {
@@ -33,10 +35,11 @@ namespace lab3{
         if(&right == this){
             return(*this);
         }
+        else
         fifo_storage.reserve(right.fifo_storage.capacity());
         back_index = right.back_index;
         front_index = right.front_index;
-        for(int n = 0; n , right.fifo_storage.size(); n++){
+        for(int n = 0; n <= right.fifo_storage.size(); n++){
             fifo_storage[n] = right.fifo_storage[n];
         }
     }
@@ -51,7 +54,7 @@ namespace lab3{
 
     int fifo::size() {
         if(!is_empty()){
-            return back_index - front_index;
+            return (back_index - front_index);
         }
     }
 
