@@ -1,5 +1,6 @@
 #include "lifo.h"
 
+
 namespace lab3{
     lifo::lifo() {
         lifo_storage.reserve(100);            //Allocated 100 spaced in array lifo_storage.
@@ -7,9 +8,10 @@ namespace lab3{
     }
 
     lifo::lifo(std::string input_string) {
-        lab2::stringVector lifo_storage;            //Does the same as the default constructor
+        //Does the same as the default constructor
         lifo_storage.reserve(100);
         lifo_storage.append(input_string);
+        index = 1;
     }
 
     lifo::lifo(const lifo &original) {
@@ -22,7 +24,6 @@ namespace lab3{
 
     lifo::~lifo() {
         index = 0;
-        lifo_storage.~stringVector();
 
     }
 
@@ -53,9 +54,11 @@ namespace lab3{
     }
 
     std::string lifo::top() {
-       return lifo_storage[index-1];
+        if (!is_empty()) {
+            return lifo_storage[index - 1];
+        }
+        else throw "array is empty.";
     }
-
     void lifo::push(std::string input) {
         ++index;
         lifo_storage.append(input);

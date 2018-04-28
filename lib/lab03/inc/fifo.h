@@ -15,8 +15,8 @@ namespace lab3 {
         virtual ~fifo();                                //Destructor
         fifo &operator=(const fifo &right);            //Assignment operator
 
-        bool is_empty();  // Return true if the fifo is empty and false if it is not
-        int size();  // Return the size of the fifo
+        bool is_empty();                  // Return true if the fifo is empty and false if it is not
+        int size();                         // Return the size of the fifo
 
         std::string top();           // Return the front string of the fifo.
         void enqueue(std::string input);   // Add input string to the back of the fifo

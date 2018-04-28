@@ -182,6 +182,7 @@ namespace lab4 {
 
     int get_number(std::string input_string);
 
+
     std::string get_operator(std::string input_string);
 
     int operator_priority(std::string const operator_in){

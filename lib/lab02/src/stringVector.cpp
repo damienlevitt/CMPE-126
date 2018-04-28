@@ -9,19 +9,19 @@ namespace lab2 {
 
     stringVector::~stringVector() {
         delete[] data;
-        data = nullptr;
-                                  //Deallocates memory used by data object
+                        //Deallocates memory used by data object
     }
 
     unsigned stringVector::size() const {              //Returns the length of the array
         return length;
 
-        //return ;
+        //return;
     }
 
     unsigned stringVector::capacity() const {
         return allocated_length;                        //Returns the amount of space allocated for the array
-        //return ;
+
+        //return;
     }
 
     void stringVector::reserve(unsigned new_size) {
