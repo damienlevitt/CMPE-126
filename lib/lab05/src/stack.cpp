@@ -1,10 +1,10 @@
 #include "stack.h"
 namespace lab5{
     stack::stack() {
-
     }
 
     stack::stack(std::string &data) {
+        storage_structure.insert(data);
 
     }
 
@@ -13,6 +13,7 @@ namespace lab5{
     }
 
     stack::~stack() {
+
 
     }
 

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include "calculator.h"
 namespace lab4 {
     int operator_priority(std::string operator_in);
@@ -181,7 +180,6 @@ namespace lab4 {
     }
 
     int get_number(std::string input_string);
-
 
     std::string get_operator(std::string input_string);
 
