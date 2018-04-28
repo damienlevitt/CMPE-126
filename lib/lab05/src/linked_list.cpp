@@ -62,7 +62,7 @@ namespace lab5 {
 
     void linked_list::insert(const std::string input, unsigned int location) {
             node* new_node = new node(input);
-            node* back = nullptr;
+            node* previous = nullptr;
             node* cnode;
         if(head == nullptr){
             new_node ->next = head;
@@ -71,32 +71,79 @@ namespace lab5 {
         else {
             for(int i = 0; i < location; i++){
                 new_node ->next = cnode;
-                back -> next = new_node;
+                previous -> next = new_node;
             }
         }
     }
 
     void linked_list::append(const std::string input) {
-
+        node *new_node = new node(input);
+        if (head == nullptr) {
+            head = new_node;
+        } else
+            new_node = head;
+        if (new_node->next == nullptr) {
+            throw "can't add to list";
+        }
+        else
+            new_node = new_node->next;
+            new_node ->next = new node(input);
     }
 
     void linked_list::remove(unsigned location) {
+        node *previous = nullptr;
+        node *cnode = head;
+        if(isEmpty()){
+            throw "stack is empty";
+        }
+        for(int n = 0; n < location; n++){
+            previous = cnode;
+            cnode = cnode->next;
 
+            if(location > listSize()){
+                throw "cannot remove";
+            }
+            else previous->next = cnode->next;
+        }
     }
 
     std::ostream& operator<<(std::ostream &stream, linked_list &RHS) {
+        node* cnode = RHS.head;
+        while (cnode != nullptr){
+            stream << cnode ->data;
+        }
         return stream;
     }
 
     std::istream& operator>>(std::istream &stream, linked_list &RHS) {
+        std::string temp;
+        stream >> temp;
+        RHS.append(temp);
+
         return stream;
     }
 
     void linked_list::sort() {
+        node *new_node;
+        node *cnode = head;
+        for (cnode = head; cnode ->next != nullptr; cnode == cnode->next){
+            if (cnode ->data > cnode->next->data){
+                new_node ->data = cnode ->data;
+                cnode ->data = cnode ->next->data;
+                cnode -> next ->data = new_node-> data;
+            }
+
+        }
 
     }
 
     std::string linked_list::get_value_at(unsigned location) {
-
+        std::string temp;
+        node* cnode = head;
+        for(int i=0; i<location; i++){
+            cnode = cnode->next;
+            temp = cnode->data;
+        }
+        return std::string(temp);
     }
 }
