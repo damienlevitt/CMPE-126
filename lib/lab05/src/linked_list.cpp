@@ -37,15 +37,43 @@ namespace lab5 {
 
 
     bool linked_list::isEmpty() const {
-        return false;
+        node* cnode = head;
+        node* tail;
+        if(cnode == nullptr && tail == nullptr){
+            return true;
+        }
+        else
+            return false;
     }
 
     unsigned linked_list::listSize() const {
-        return 0;
+        node *cnode = head;
+        int count = 0;
+        if (cnode == nullptr){
+            throw "list is empty";
+        }
+        else
+            while(cnode != nullptr){
+                cnode = cnode -> next;
+                count++;
+                return count;
+            }
     }
 
     void linked_list::insert(const std::string input, unsigned int location) {
-
+            node* new_node = new node(input);
+            node* back = nullptr;
+            node* cnode;
+        if(head == nullptr){
+            new_node ->next = head;
+            head = new_node;
+        }
+        else {
+            for(int i = 0; i < location; i++){
+                new_node ->next = cnode;
+                back -> next = new_node;
+            }
+        }
     }
 
     void linked_list::append(const std::string input) {
