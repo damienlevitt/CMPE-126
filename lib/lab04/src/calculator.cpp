@@ -16,6 +16,7 @@ namespace lab4 {
             size++;
         }
         for (int i = 0; i < size; i++) {
+            std::string n = temp[i].data();
             if (temp[i] == " ") {
                 i++;
             } else if (i == size - 1) {
@@ -112,34 +113,35 @@ namespace lab4 {
         int answer = 0;
         bool is_number(std::string input_string);
         bool is_operator(std::string input_string);
-        lab3::lifo final_stack;
+        lab3::lifo tempStack;
         while (!postfix_expression.is_empty()) {
+            std::string temp = postfix_expression.top();
             if (is_number(postfix_expression.top())) {
-                final_stack.push(postfix_expression.top());
+                tempStack.push(postfix_expression.top());
                 postfix_expression.dequeue();
             } else if (is_operator(postfix_expression.top())) {
                 std::string tempOp = postfix_expression.top();
                 postfix_expression.dequeue();
-                int temp = std::stoi(final_stack.top());
-                final_stack.pop();
-                int temp1 = std::stoi(final_stack.top());
-                final_stack.pop();
+                int temp = std::stoi(tempStack.top());
+                tempStack.pop();
+                int temp1 = std::stoi(tempStack.top());
+                tempStack.pop();
                 if (tempOp == "/") {
                     answer = temp1 / temp;
                     std::string in = std::to_string(answer);
-                    final_stack.push(in);
+                    tempStack.push(in);
                 } else if (tempOp == "*") {
                     answer = temp1 * temp;
                     std::string in = std::to_string(answer);
-                    final_stack.push(in);
+                    tempStack.push(in);
                 } else if (tempOp == "+") {
                     answer = temp1 + temp;
                     std::string in = std::to_string(answer);
-                    final_stack.push(in);
+                    tempStack.push(in);
                 } else if (tempOp == "-") {
                     answer = temp1 - temp;
                     std::string in = std::to_string(answer);
-                    final_stack.push(in);
+                    tempStack.push(in);
                 }
             }
         }
@@ -185,10 +187,10 @@ namespace lab4 {
 
     int operator_priority(std::string const operator_in){
         int n;
-        if(operator_in == "+" || "-"){
+        if(operator_in == "+" || operator_in == "-"){
             n = 1;
         }
-        else if (operator_in == "*" || "/"){
+        else if (operator_in == "*" || operator_in == "/"){
             n = 2;                                  //Will give precedence to the operators.
         }
         else if (operator_in == "^"){
