@@ -8,8 +8,9 @@ namespace lab4 {
 
     void calculator::parse_to_infix(std::string &input_expression) {
         int size = 0;
-        int op = 0;
+        int r = 0;
         int infix_size = 0;
+
         std::string temp[input_expression.size()];
         for (std::string::iterator count = input_expression.begin(); count != input_expression.end(); ++count) {
             temp[size] = *count;
@@ -32,23 +33,23 @@ namespace lab4 {
                 infix_size++;
             }
             if (i != size - 1 && is_number(temp[i]) && is_number(temp[i + 1])) {
-                op = i;
-                if (op == size - 2) {
-                    op = op + 2;
+                r = i;
+                if (r == size - 2) {
+                    r = r + 2;
                 }
-                if (op == size - 3) {
-                    op = op + 3;
+                if (r == size - 3) {
+                    r = r + 3;
                 }
-                if (op != size) {
-                    while (op != size - 1 && is_number(temp[op])) {
-                        op++;
+                if (r != size) {
+                    while (r != size - 1 && is_number(temp[r])) {
+                        r++;
                     }
                 }
                 std::string int_temp;
-                for (int z = i; z < op; z++) {
+                for (int n = i; n < r; n++) {
                     int_temp += temp[i++];
                 }
-                i = op - 1;
+                i = r - 1;
                 infix_expression.enqueue(int_temp);
                 infix_size++;
             }
@@ -56,32 +57,31 @@ namespace lab4 {
     }
 
     void calculator::convert_to_postfix(lab3::fifo infix_expression) {
-        lab3::fifo infix_copy(infix_expression);
+        lab3::fifo stack;
         lab3::lifo OperatorStack;
         std::string temporary;
-        while(!infix_copy.is_empty()) {
-            temporary = infix_copy.top();
+        while(!infix_expression.is_empty()) {
+            temporary = infix_expression.top();
             if (is_number(temporary)){
                 postfix_expression.enqueue(temporary);
             }
-            if(is_operator(temporary)) {
-                while (!OperatorStack.is_empty() && (operator_priority(OperatorStack.top()) >= operator_priority(temporary)) && (OperatorStack.top() != "(")){
+            else if(is_operator(temporary)) {
+                while (!OperatorStack.is_empty() && (operator_priority(OperatorStack.top()) >= operator_priority(temporary))){
                     postfix_expression.enqueue(OperatorStack.top());
                     OperatorStack.pop();
                 }
                 OperatorStack.push(temporary);
             }
-            if (temporary == "(") {
+            else if (temporary == "(") {
                 OperatorStack.push(temporary);
             }
-            if (temporary == ")") {
+            else if (temporary == ")") {
                 while (OperatorStack.top() != "("){
                     postfix_expression.enqueue(OperatorStack.top());
                     OperatorStack.pop();
                 }
                 OperatorStack.pop();
             }
-            infix_copy.dequeue();
         }
         while(!OperatorStack.is_empty()) {
             postfix_expression.enqueue(OperatorStack.top());
@@ -144,6 +144,7 @@ namespace lab4 {
                     tempStack.push(in);
                 }
             }
+            answer = std::stoi(tempStack.top());
         }
 
         return answer;
