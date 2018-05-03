@@ -18,9 +18,7 @@ namespace lab4 {
         }
         for (int i = 0; i < size; i++) {
             std::string n = temp[i].data();
-            if (temp[i] == " ") {
-                i++;
-            } else if (i == size - 1) {
+            if (i == size - 1) {
                 infix_expression.enqueue(temp[i]);
                 infix_size++;
             }
@@ -46,7 +44,7 @@ namespace lab4 {
                     }
                 }
                 std::string int_temp;
-                for (int n = i; n < r; n++) {
+                for (int s = i; s < r; s++) {
                     int_temp += temp[i++];
                 }
                 i = r - 1;
@@ -57,11 +55,11 @@ namespace lab4 {
     }
 
     void calculator::convert_to_postfix(lab3::fifo infix_expression) {
-        lab3::fifo stack;
         lab3::lifo OperatorStack;
         std::string temporary;
         while(!infix_expression.is_empty()) {
             temporary = infix_expression.top();
+            infix_expression.dequeue();
             if (is_number(temporary)){
                 postfix_expression.enqueue(temporary);
             }
@@ -99,14 +97,17 @@ namespace lab4 {
     }
 
     std::istream &operator>>(std::istream &stream, calculator &RHS) {
-        std::string temporary = " ";
-        lab3::fifo infix_expression;
-        while(stream.peek() != EOF){
-            temporary = stream.get();
-            RHS.parse_to_infix(temporary);
-            RHS.convert_to_postfix(infix_expression);
-            return stream;
+        std::istreambuf_iterator<char> OpTemp;
+        std::string ex(std::istreambuf_iterator<char>(stream), OpTemp);
+        while (!RHS.infix_expression.is_empty()){
+            RHS.infix_expression.dequeue();
         }
+        while (!RHS.postfix_expression.is_empty()){
+            RHS.postfix_expression.dequeue();
+        }
+        RHS.parse_to_infix(ex);
+        RHS.convert_to_postfix(RHS.infix_expression);
+        return stream;
     }
 
     int lab4::calculator::calculate() {
@@ -151,28 +152,37 @@ namespace lab4 {
     }
 
     std::ostream &operator<<(std::ostream &stream, calculator &RHS) {
-        lab3::fifo temp = RHS.infix_expression;
-        lab3::fifo temp2 = RHS.postfix_expression;
-        while(!temp.is_empty()) {
-            stream << temp.top();
-            temp.dequeue();
+        unsigned temp = RHS.infix_expression.size();
+        unsigned temp2 = RHS.postfix_expression.size();
+
+        stream << std::string("Infix: ");
+        for(int i = 0; i < temp - 1; i++){
+            stream << RHS.infix_expression.top();
+            stream << std::string(",");
+            RHS.infix_expression.dequeue();
         }
-        while(!temp2.is_empty()){
-            stream << temp2.top();
-            temp2.dequeue();
+        stream << RHS.infix_expression.top();
+        stream << std::string("\n");
+        stream << std::string("Postfix: ");
+        for (int i = 0; i < temp2 - 1; i++){
+            stream << RHS.postfix_expression.top();
+            stream << std::string(",");
+            RHS.postfix_expression.dequeue();
         }
+        stream << RHS.postfix_expression.top();
         return stream;
     }
 
 
     // AUXILIARY FUNCTIONS
-    bool is_number(std::string const input_string){
-        if (input_string >= "0" && input_string <= "999"){
-            if(input_string == "-" || input_string == "+" || input_string == "/" || input_string == "*" || input_string == "(" || input_string == ")"){
-                return false;
-            }                                               //Determines if there are numbers in input_string by
+    bool is_number(std::string const input_string) {
+        if (input_string >= "0" && input_string <= "99") {
+            //Determines if there are numbers in input_string by
             return true;
-        }
+            }
+
+         else
+            return false;
     }
 
     bool is_operator(std::string const input_string){
@@ -182,19 +192,16 @@ namespace lab4 {
         return false;                                       // Just determines if there is an operator in input_string.
     }
 
-    int get_number(std::string input_string);
-
-    std::string get_operator(std::string input_string);
 
     int operator_priority(std::string const operator_in){
-        int n;
+        int n = 0;
         if(operator_in == "+" || operator_in == "-"){
             n = 1;
         }
-        else if (operator_in == "*" || operator_in == "/"){
+        if (operator_in == "*" || operator_in == "/"){
             n = 2;                                  //Will give precedence to the operators.
         }
-        else if (operator_in == "^"){
+        if (operator_in == "^"){
             n = 3;
         }
         return n;

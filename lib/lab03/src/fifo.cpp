@@ -55,7 +55,8 @@ namespace lab3{
         if(!is_empty()){
             return (back_index - front_index);
         }
-        else throw "array is empty.";
+        else
+            return 0;
     }
 
     std::string fifo::top()  {

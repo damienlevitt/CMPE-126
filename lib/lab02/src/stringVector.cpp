@@ -9,6 +9,7 @@ namespace lab2 {
 
     stringVector::~stringVector() {
         delete[] data;
+        data = nullptr;
                         //Deallocates memory used by data object
     }
 
