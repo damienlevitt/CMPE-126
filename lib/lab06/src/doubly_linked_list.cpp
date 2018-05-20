@@ -205,17 +205,18 @@ namespace lab6 {
             temp = temp->next;
             counter++;
         }
-        node* temp2 = head;
+        node* temp2 = temp;
         node* tempPrev2 = temp2->prev;
         node* tempNext2 = temp2->next;
         for (int i = position_1; i<position_2; i++){
             temp2 = temp2->next;
         }
-        if(tempPrev == nullptr && tempNext != nullptr){             //edge case when swapping head and an element that is not tail
+        if(tempPrev == nullptr && tempNext2 != nullptr){             //edge case when swapping head and an element that is not tail
             if(tempNext == temp2){              //head and element are next to each other
                 temp2->next = temp;
                 temp->prev = temp2;
                 temp->next = tempNext2;
+                tempNext2->prev = temp;
                 temp2->prev = nullptr;
                 head = temp2;
             }
@@ -223,7 +224,7 @@ namespace lab6 {
                 tempNext->prev = temp2;
                 tempPrev2->next = temp;
                 tempNext2->prev = temp;
-                temp->prev = tempPrev;
+                temp->prev = tempPrev2;
                 temp2->prev = nullptr;
                 temp->next = tempNext2;
                 temp2->next = tempNext;
@@ -250,16 +251,196 @@ namespace lab6 {
                 tail = temp;
             }
         }
-
+        else if (tempNext == temp2 && tempPrev != nullptr && tempNext2 != nullptr){          //swapping elements that are next to each other.
+            tempPrev->next = temp2;
+            temp2->prev = tempPrev;
+            temp2->next = temp;
+            temp->prev = temp2;
+            temp->next = tempNext2;
+            tempNext2->prev = temp;
+        }
+        else if (tempPrev == nullptr && tempNext2 == nullptr){
+            if(size()==2){                                                      //makes sure only head and tail are in the linked list.
+                temp2->next = temp;
+                temp->prev = temp2;
+                temp->next = nullptr;
+                temp2->prev = nullptr;
+                head = temp2;
+                tail = temp;
+            }
+            else {
+                temp->prev = tempPrev2;
+                temp->next = nullptr;
+                tempPrev2->next = temp;
+                temp2->prev = nullptr;
+                temp2->next = tempNext;
+                tempNext->prev = temp2;
+                head = temp2;
+                tail = temp;
+            }
+        }
+        else {
+            tempPrev->next = temp2;
+            tempNext->prev = temp2;
+            tempPrev2->next = temp;
+            tempNext2->prev = temp;
+            temp->prev = tempPrev2;
+            temp2->prev = tempPrev;
+            temp->next = tempNext2;
+            temp2->next = tempNext;
+        }
     }
 
     void doubly_linked_list::swap_set(unsigned location_1_start, unsigned location_1_end, unsigned location_2_start,
                                       unsigned location_2_end) {
+        node* curr = head;
+        if(location_1_start > location_2_start && location_1_start > location_2_end){
+            int start = location_1_start;
+            int end = location_1_end;
+            location_1_start = location_2_start;            //makes sure that the start1 is before start2
+            location_2_start = start;                       //makes sure that start1 comes before end2
+            location_1_end = location_2_end;
+            location_2_end = end;
+        }
+        if(location_1_start > location_1_end){
+            int temp = location_1_start;            //performs a simple temp swap if the start and end locations are flipped for location1
+            location_1_start = location_1_end;
+            location_1_end = temp;
+        }
+        if(location_2_start > location_2_end){
+            int temp = location_2_start;
+            location_2_start = location_2_end;
+            location_2_end = temp;
+        }
+        if(location_1_end >= location_2_start){
+            throw "error: invalid location bounds.";
+        }
+        int count = 0;
+        while(count != location_1_start){
+            curr = curr->next;
+            count++;
+        }
+        node* A = curr;
+        while(count != location_1_end){
+            A = A->next;
+            count++;
+        }
+        node* B = A;
+        while(count != location_2_start){
+            B = B->next;
+            count++;
+        }
+        node* C = B;
+        while(count != location_2_end){
+            C = C->next;
+            count++;
+        }
+        node* currPrev = curr->prev;
+        node* Anext = A->next;
+        node* Bprev = B->prev;
+        node* Cnext = C->next;
 
+        if (currPrev != nullptr && Cnext != nullptr && Bprev == A){
+            currPrev->next = B;
+            B->prev = currPrev;
+            C->next = curr;
+            curr->prev = C;
+            A->next = Cnext;
+            Cnext->prev = A;
+        }
+        else if(currPrev == nullptr && Cnext != nullptr){                       //edge case for swapping set with head and another set that does not have a tail
+            if(Anext == C || Bprev == C){
+               B->prev = nullptr;
+                C->next = curr;
+                curr->prev = C;
+                A->next = Cnext;
+                Cnext->prev = C;
+                head = B;
+            }
+            else{
+                B->prev = nullptr;
+                C->next = Anext;
+                Anext->prev = C;
+                Bprev->next = curr;
+                curr->prev = Bprev;
+                A->next = Cnext;
+                Cnext->prev = A;
+                head = B;
+            }
+        }
+        else if(currPrev != nullptr && Cnext == nullptr){                       //edge case for swapping a set with tail and a set that does not have a head
+            if(Bprev == A){
+                currPrev->next = B;
+                B->prev = currPrev;
+                C->next = curr;
+                A->prev = C;
+                A->next = nullptr;
+                tail = A;
+            }
+            else{
+                currPrev->next = B;
+                B->prev = currPrev;
+                C->next = Anext;
+                Anext->prev = C;
+                Bprev->next = curr;
+                curr->prev = Bprev;
+                A->next = nullptr;
+                tail = A;
+            }
+        }
+        else if(currPrev == nullptr && Cnext == nullptr){
+            if(Bprev == A){
+                B->prev = nullptr;
+                C->next = curr;
+                curr->prev = C;
+                A->next = nullptr;
+                head = B;
+                tail = A;
+            }
+            else{
+                B->prev = nullptr;
+                C->next = Anext;
+                Anext->prev = C;
+                Bprev->next = curr;
+                curr->prev = Bprev;
+                A->next = nullptr;
+                head = B;
+                tail = A;
+            }
+        }
+        else{
+            currPrev->next = B;
+            B->prev = currPrev;
+            C->next = Anext;
+            Anext->prev = C;
+            Bprev->next = curr;
+            curr->prev = Bprev;
+            A->next = Cnext;
+            Cnext->prev = A;
+        }
     }
 
     void doubly_linked_list::sort() {
-        // Implement Insertion Sort
+       if (!is_empty()){
+           node* prev = head;
+           node* current = prev->next;
+           int prev_location = 0;
+           int current_location = 1;
+           while (current != nullptr) {      //if so, then out of bounds or empty list.
+               node* temp = current;
+               current = current->next;
+               int temp_location = current_location;
+               int temp_location2 = prev_location;
+               while(temp->prev != nullptr && temp->get_data() < temp->prev->get_data()){
+                   swap(temp_location,temp_location2);
+                   temp_location--;
+                   temp_location2--;
+               }
+               current_location++;
+               prev_location++;
+           }
+       }
+        else throw "list is empty";
     }
 
     doubly_linked_list doubly_linked_list::operator+(const doubly_linked_list &rhs) const {
@@ -312,14 +493,14 @@ namespace lab6 {
 
     std::ostream &operator<<(std::ostream &stream, doubly_linked_list &RHS) {
         node* current = RHS.head;
-        stream << std::string("nullptr <- ");
+        stream << std::string("NULL <- ");
         while(current->next){
             stream << current->get_data();
             stream << " <-> ";
             current = current->next;
         }
         stream << current->get_data();
-        stream << " -> nullptr";
+        stream << " -> NULL";
         return stream;
     }
 
