@@ -9,7 +9,6 @@ namespace lab2 {
 
     stringVector::~stringVector() {
         delete[] data;
-        data = nullptr;
                         //Deallocates memory used by data object
     }
 
@@ -60,7 +59,6 @@ namespace lab2 {
         else{
             data[length] = new_data;                    //Appends data to the end of the array by data location by 1
             length++;
-            return;
     }
 }
 void stringVector::swap(unsigned pos1, unsigned pos2) {

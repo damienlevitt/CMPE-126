@@ -10,7 +10,7 @@ namespace lab3{
 
     fifo::fifo(std::string input_string) {
         fifo_storage.reserve(100);
-        fifo_storage.append(input_string);
+        fifo_storage.append(std::move(input_string));
         front_index = 0;
         back_index = 1;
     }

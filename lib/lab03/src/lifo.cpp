@@ -1,5 +1,6 @@
 #include "lifo.h"
 
+#include <utility>
 
 namespace lab3{
     lifo::lifo() {
@@ -10,8 +11,9 @@ namespace lab3{
     lifo::lifo(std::string input_string) {
         //Does the same as the default constructor
         lifo_storage.reserve(100);
-        lifo_storage.append(input_string);
         index = 1;
+        lifo_storage.append(input_string);
+
     }
 
     lifo::lifo(const lifo &original) {
@@ -23,8 +25,8 @@ namespace lab3{
     }
 
     lifo::~lifo() {
+        lifo_storage.reserve(0);
         index = 0;
-
     }
 
     lifo &lifo::operator=(const lifo &right) {
@@ -38,11 +40,11 @@ namespace lab3{
     }
 
     bool lifo::is_empty() {
-        if (index >= 1) {
-            return false;
+        if (index == 0) {
+            return true;
         }
         else
-            return true;
+            return false;
     }
 
     int lifo::size()  {
@@ -60,11 +62,11 @@ namespace lab3{
         else throw "array is empty.";
     }
     void lifo::push(std::string input) {
-        ++index;
         lifo_storage.append(input);
+        index++;
     }
 
     void lifo::pop() {
-        --index;
+        index--;
     }
 }

@@ -30,7 +30,7 @@ namespace lab5{
     }
 
     std::string stack::top() const {
-        //return std::__cxx11::string();
+        return std::__cxx11::string();
     }
 
     void stack::push(const std::string &data) {

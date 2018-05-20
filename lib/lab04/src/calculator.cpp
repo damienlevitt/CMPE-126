@@ -1,3 +1,4 @@
+#include <string>
 #include <iostream>
 #include "calculator.h"
 namespace lab4 {
@@ -18,10 +19,15 @@ namespace lab4 {
         }
         for (int i = 0; i < size; i++) {
             std::string n = temp[i].data();
-            if (i == size - 1) {
+            if (temp[i] == " ") {
+                //skip
+            }
+            else {
+                if (i == size - 1) {
                 infix_expression.enqueue(temp[i]);
                 infix_size++;
             }
+
             if (i != size - 1 && !is_number(temp[i])) {
                 infix_expression.enqueue(temp[i]);
                 infix_size++;
@@ -52,6 +58,7 @@ namespace lab4 {
                 infix_size++;
             }
         }
+        }
     }
 
     void calculator::convert_to_postfix(lab3::fifo infix_expression) {
@@ -63,17 +70,17 @@ namespace lab4 {
             if (is_number(temporary)){
                 postfix_expression.enqueue(temporary);
             }
-            else if(is_operator(temporary)) {
-                while (!OperatorStack.is_empty() && (operator_priority(OperatorStack.top()) >= operator_priority(temporary))){
+             if(is_operator(temporary)) {
+                while (!OperatorStack.is_empty() && operator_priority(OperatorStack.top()) >= operator_priority(temporary) && OperatorStack.top() != "("){
                     postfix_expression.enqueue(OperatorStack.top());
                     OperatorStack.pop();
                 }
                 OperatorStack.push(temporary);
             }
-            else if (temporary == "(") {
+             if (temporary == "(") {
                 OperatorStack.push(temporary);
             }
-            else if (temporary == ")") {
+             if (temporary == ")") {
                 while (OperatorStack.top() != "("){
                     postfix_expression.enqueue(OperatorStack.top());
                     OperatorStack.pop();
@@ -112,8 +119,6 @@ namespace lab4 {
 
     int lab4::calculator::calculate() {
         int answer = 0;
-        bool is_number(std::string input_string);
-        bool is_operator(std::string input_string);
         lab3::lifo tempStack;
         while (!postfix_expression.is_empty()) {
             std::string temp = postfix_expression.top();
@@ -147,7 +152,6 @@ namespace lab4 {
             }
             answer = std::stoi(tempStack.top());
         }
-
         return answer;
     }
 
@@ -177,11 +181,12 @@ namespace lab4 {
     // AUXILIARY FUNCTIONS
     bool is_number(std::string const input_string) {
         if (input_string >= "0" && input_string <= "99") {
-            //Determines if there are numbers in input_string by
+            if(input_string == "+" || input_string == "-" || input_string == "*" || input_string == "/" || input_string == "(" || input_string == ")"){
+                return false;
+            }
+           //Determines if there are numbers in input_string
             return true;
             }
-
-         else
             return false;
     }
 
@@ -201,9 +206,10 @@ namespace lab4 {
         if (operator_in == "*" || operator_in == "/"){
             n = 2;                                  //Will give precedence to the operators.
         }
-        if (operator_in == "^"){
+        if (operator_in == "(" || operator_in == ")"){
             n = 3;
         }
+
         return n;
     }
 }
