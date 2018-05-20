@@ -189,6 +189,67 @@ namespace lab6 {
     }
 
     void doubly_linked_list::swap(unsigned position_1, unsigned position_2) {
+        node* temp = head;
+        node* tempPrev = temp->prev;
+        node* tempNext = temp->next;
+        int counter = 0;
+        if (position_1 > position_2){
+            int temp = position_1;      //this will ensure that position_2 is always after position_1
+            position_1 = position_2;
+            position_2 = temp;
+        }
+        if (position_1 == position_2){
+            throw "position_1 and position_2 are equal.";
+        }
+        while(counter != position_1){
+            temp = temp->next;
+            counter++;
+        }
+        node* temp2 = head;
+        node* tempPrev2 = temp2->prev;
+        node* tempNext2 = temp2->next;
+        for (int i = position_1; i<position_2; i++){
+            temp2 = temp2->next;
+        }
+        if(tempPrev == nullptr && tempNext != nullptr){             //edge case when swapping head and an element that is not tail
+            if(tempNext == temp2){              //head and element are next to each other
+                temp2->next = temp;
+                temp->prev = temp2;
+                temp->next = tempNext2;
+                temp2->prev = nullptr;
+                head = temp2;
+            }
+            else{
+                tempNext->prev = temp2;
+                tempPrev2->next = temp;
+                tempNext2->prev = temp;
+                temp->prev = tempPrev;
+                temp2->prev = nullptr;
+                temp->next = tempNext2;
+                temp2->next = tempNext;
+                head = temp2;
+            }
+        }
+        else if (tempPrev != nullptr && tempNext2 == nullptr) {           //swap for tail and an element that is not head.
+            if(tempNext == temp2){
+                tempPrev->next = temp2;
+                temp2->prev = tempPrev;
+                temp2->next = temp;
+                temp->prev = temp2;
+                temp->next = nullptr;
+                tail = temp;
+            }
+            else{
+                tempPrev->next = temp2;
+                temp2->prev = tempPrev;
+                temp2->next = tempNext;
+                tempNext->prev = temp2;
+                tempPrev2->next = temp;
+                temp->prev = tempPrev2;
+                temp->next = nullptr;
+                tail = temp;
+            }
+        }
 
     }
 
