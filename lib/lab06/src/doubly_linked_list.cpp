@@ -203,7 +203,7 @@ namespace lab6 {
         }
 
         if(position_1 == position_2){
-            return;
+            throw "error, positions are the same.";
         }
 
         node* tempA = head;
@@ -440,10 +440,10 @@ namespace lab6 {
        if (!is_empty()){
            node* prev = head;
            node* current = prev->next;
+           node* temp = current;
            int prev_location = 0;
            int current_location = 1;
            while (current != nullptr) {      //if so, then out of bounds or empty list.
-               node* temp = current;
                current = current->next;
                int temp_location = current_location;
                int temp_location2 = prev_location;
@@ -456,7 +456,7 @@ namespace lab6 {
                prev_location++;
            }
        }
-        else throw "list is empty";
+        throw "list is empty";
     }
 
     doubly_linked_list doubly_linked_list::operator+(const doubly_linked_list &rhs) const {
