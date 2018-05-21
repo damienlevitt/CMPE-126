@@ -31,7 +31,7 @@ namespace lab6 {
             copy = new_copy;
         }
         copy->next = nullptr;
-        tail = copy;
+        this->tail = copy;
     }
 
     doubly_linked_list::~doubly_linked_list() {
@@ -46,6 +46,9 @@ namespace lab6 {
     int doubly_linked_list::get_data(unsigned position) {
         node *temp = head;
         int answer;
+        if (position >= size()){
+            throw "the position does not exist.";
+        }
         for (int i = 0; i < position; i++) {
             temp = temp->next;
         }
@@ -57,27 +60,24 @@ namespace lab6 {
     std::vector<int> doubly_linked_list::get_set(unsigned position_from, unsigned position_to) {
         node *current = head;
         std::vector<int> answer;
-        int i = 0;                  //location in the answer vector
-        unsigned counter = 0;
+        int counter;                   //location in the answer vector
         if (position_from >= size() || position_to >= size() || position_from > position_to || position_from < 0 ||
             position_to < 0) {
             throw "invalid position";
         }
-        while (counter != position_from) {
+        for(int i = 0; i < position_from; i++) {
             current = current->next;
-            counter++;
         }
-        while (counter != position_to) {
-            answer.at(i) = current->get_data();
+        for(int i = position_from; i<=position_to; i++) {
+            counter = current->get_data();
             current = current->next;
-            counter++;
-            i++;
+            answer.push_back(counter);
         }
         return answer;
     }
 
 
-    unsigned doubly_linked_list::size()const {
+    unsigned doubly_linked_list::size() const {
         node* temp = head;
         unsigned counter = 0;
         while(temp != nullptr) {
@@ -473,23 +473,23 @@ namespace lab6 {
         return *this;
     }
 
-    bool doubly_linked_list::operator==(const doubly_linked_list &rhs) {
-    node* current = head;
-    node* right = rhs.head;
-        if (this->size() != rhs.size()){                 //objects are different sizes therefore not equal
-            return false;
-        }
-        else{
-            while(current){
-                if(current->get_data() != right->get_data()){       //objects have the same data at the same locations
-                    return false;
-                }
-                current = current->next;
-                right = right->next;
-            }
-            return true;
-        }
-    }
+//    bool doubly_linked_list::operator==(const doubly_linked_list &rhs) {
+//    node* current = head;
+//    node* right = rhs.head;
+//        if (this->size() != rhs.size()){                 //objects are different sizes therefore not equal
+//            return false;
+//        }
+//        else{
+//            while(current){
+//                if(current->get_data() != right->get_data()){       //objects have the same data at the same locations
+//                    return false;
+//                }
+//                current = current->next;
+//                right = right->next;
+//            }
+//            return true;
+//        }
+//    }
 
     std::ostream &operator<<(std::ostream &stream, doubly_linked_list &RHS) {
         node* current = RHS.head;
