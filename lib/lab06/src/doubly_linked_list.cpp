@@ -112,52 +112,58 @@ namespace lab6 {
     }
 
     void doubly_linked_list::insert(int input, unsigned int location) {
-        node* current = head;
-        node* previous = nullptr;
-       // node* next = current->next;
-        node* new_node = new node(input);
-        unsigned counter = 0;
+        node *current = head;
+        node *previous = nullptr;
+        // node* next = current->next;
+        node *new_node = new node(input);
         if (head == nullptr) {
             head = new_node;
             tail = new_node;
             return;
         }
-        while(counter != location){
+        for (int i = 0; i < location; i++) {
             previous = current;                 //finds the current node at position "location"
             current = current->next;
-            counter++;
         }
-        if(previous){
+        if (previous) {
             previous->next = new_node;
             new_node->prev = previous;
             new_node->next = current;
             current->prev = new_node;
-        }
-        else
+        } else {
             head = new_node;
-            head->next = current;
+            head->next = current;           //no previous node, therefore new_node is at the head.
             current->prev = head;
             head->prev = nullptr;
 
         }
-
+    }
 
     void doubly_linked_list::remove(unsigned location) {
-        node* current = head;
-        node* previous = current->prev;
-        node* next_node = current->next;
-        unsigned counter = 0;
-        if (location) {
-            while (counter != location) {
-                current = current->next;
-                counter++;
-            }
-            next_node->prev = previous;
-            previous->next = next_node;
-            current->next = nullptr;
-            current->prev = nullptr;
+        node *previous = nullptr;
+        node *current;
+        current = head;
+        if(location>size()){
+            throw "location larger than the list.";
         }
-        throw "location does not exist.";
+        for(int i = 0; i < location; i++) { // finds the node at location
+            previous = current;
+            current = current->next;
+        }
+        if (previous) { // edge case for a previous node
+            if(!current->next){
+                previous->next = nullptr;
+                tail = previous;
+                delete(current);
+                return;
+            }
+            previous->next = current->next;
+            current->next->prev = current->prev;
+        }
+        else if(!previous){
+            head = current->next;
+        }
+        delete(current);
     }
 
     doubly_linked_list doubly_linked_list::split(unsigned position) {
@@ -189,111 +195,121 @@ namespace lab6 {
     }
 
     void doubly_linked_list::swap(unsigned position_1, unsigned position_2) {
-        node* temp = head;
-        node* tempPrev = temp->prev;
-        node* tempNext = temp->next;
-        int counter = 0;
-        if (position_1 > position_2){
-            int temp = position_1;      //this will ensure that position_2 is always after position_1
+
+        if(position_1 > position_2){    //makes sure that position one always comes before position2
+            int temp = position_1;
             position_1 = position_2;
             position_2 = temp;
         }
-        if (position_1 == position_2){
-            throw "position_1 and position_2 are equal.";
+
+        if(position_1 == position_2){
+            return;
         }
-        while(counter != position_1){
-            temp = temp->next;
-            counter++;
+
+        node* tempA = head;
+        for(int i=0; i<position_1; i++) {
+            tempA = tempA->next;
         }
-        node* temp2 = temp;
-        node* tempPrev2 = temp2->prev;
-        node* tempNext2 = temp2->next;
-        for (int i = position_1; i<position_2; i++){
-            temp2 = temp2->next;
+
+        node* tempB = tempA;
+        for(int i=position_1; i<position_2; i++){
+            tempB = tempB->next;
         }
-        if(tempPrev == nullptr && tempNext2 != nullptr){             //edge case when swapping head and an element that is not tail
-            if(tempNext == temp2){              //head and element are next to each other
-                temp2->next = temp;
-                temp->prev = temp2;
-                temp->next = tempNext2;
-                tempNext2->prev = temp;
-                temp2->prev = nullptr;
-                head = temp2;
-            }
-            else{
-                tempNext->prev = temp2;
-                tempPrev2->next = temp;
-                tempNext2->prev = temp;
-                temp->prev = tempPrev2;
-                temp2->prev = nullptr;
-                temp->next = tempNext2;
-                temp2->next = tempNext;
-                head = temp2;
-            }
+
+        node* tempAprev = tempA->prev;
+        node* tempAnext = tempA->next;
+        node* tempBprev = tempB->prev;
+        node* tempBnext = tempB->next;
+
+        if(tempAnext == tempB && tempAprev != nullptr && tempBnext != nullptr){   //swaps the elements that are next to each other
+            tempAprev->next = tempB;
+            tempB->prev = tempAprev;
+            tempB->next = tempA;
+            tempA->prev = tempB;
+            tempA->next = tempBnext;
+            tempBnext->prev = tempA;
         }
-        else if (tempPrev != nullptr && tempNext2 == nullptr) {           //swap for tail and an element that is not head.
-            if(tempNext == temp2){
-                tempPrev->next = temp2;
-                temp2->prev = tempPrev;
-                temp2->next = temp;
-                temp->prev = temp2;
-                temp->next = nullptr;
-                tail = temp;
-            }
-            else{
-                tempPrev->next = temp2;
-                temp2->prev = tempPrev;
-                temp2->next = tempNext;
-                tempNext->prev = temp2;
-                tempPrev2->next = temp;
-                temp->prev = tempPrev2;
-                temp->next = nullptr;
-                tail = temp;
-            }
-        }
-        else if (tempNext == temp2 && tempPrev != nullptr && tempNext2 != nullptr){          //swapping elements that are next to each other.
-            tempPrev->next = temp2;
-            temp2->prev = tempPrev;
-            temp2->next = temp;
-            temp->prev = temp2;
-            temp->next = tempNext2;
-            tempNext2->prev = temp;
-        }
-        else if (tempPrev == nullptr && tempNext2 == nullptr){
-            if(size()==2){                                                      //makes sure only head and tail are in the linked list.
-                temp2->next = temp;
-                temp->prev = temp2;
-                temp->next = nullptr;
-                temp2->prev = nullptr;
-                head = temp2;
-                tail = temp;
+
+        else if(tempAprev == nullptr && tempBnext == nullptr){ //edge case for swapping head and tail
+            if(size()==2){
+                tempB->next = tempA;
+                tempA->prev = tempB;
+                tempA->next = nullptr;
+                tempB->prev = nullptr;
+                head = tempB;
+                tail = tempA;
             }
             else {
-                temp->prev = tempPrev2;
-                temp->next = nullptr;
-                tempPrev2->next = temp;
-                temp2->prev = nullptr;
-                temp2->next = tempNext;
-                tempNext->prev = temp2;
-                head = temp2;
-                tail = temp;
+                tempA->prev = tempBprev;
+                tempA->next = nullptr;
+                tempBprev->next = tempA;
+                tempB->prev = nullptr;
+                tempB->next = tempAnext;
+                tempAnext->prev = tempB;
+                head = tempB;
+                tail = tempA;
             }
         }
-        else {
-            tempPrev->next = temp2;
-            tempNext->prev = temp2;
-            tempPrev2->next = temp;
-            tempNext2->prev = temp;
-            temp->prev = tempPrev2;
-            temp2->prev = tempPrev;
-            temp->next = tempNext2;
-            temp2->next = tempNext;
+
+        else if(tempAprev == nullptr && tempBnext != nullptr){    // edge case for swapping head and not tail
+
+            if(tempAnext == tempB){
+                tempA->prev = tempB;
+                tempA->next = tempBnext;
+                tempBnext->prev = tempA;
+                tempB->prev = nullptr;
+                head = tempB;
+
+            }
+            else {
+                tempAnext->prev = tempB;
+                tempBprev->next = tempA;
+                tempBnext->prev = tempA;
+                tempA->prev = tempBprev;
+                tempB->prev = nullptr;
+                tempA->next = tempBnext;
+                tempB->next = tempAnext;
+                head = tempB;
+            }
+        }
+
+        else if(tempAprev != nullptr && tempBnext == nullptr){    //edge case for swapping tail and not head
+
+            if(tempAnext == tempB) {
+                tempAprev->next = tempB;
+                tempB->prev = tempAprev;
+                tempB->next = tempA;
+                tempA->prev = tempB;
+                tempA->next = nullptr;
+                tail = tempA;
+            }
+            else{
+                tempAprev->next = tempB;
+                tempB->prev = tempAprev;
+                tempB->next = tempAnext;
+                tempAnext->prev = tempB;
+                tempBprev->next = tempA;
+                tempA->prev = tempBprev;
+                tempA->next = nullptr;
+                tail = tempA;
+            }
+        }
+
+        else {                  //if no edge cases apply
+            tempAprev->next = tempB;
+            tempAnext->prev = tempB;
+            tempBprev->next = tempA;
+            tempBnext->prev = tempA;
+            tempA->prev = tempBprev;
+            tempB->prev = tempAprev;
+            tempA->next = tempBnext;
+            tempB->next = tempAnext;
         }
     }
 
     void doubly_linked_list::swap_set(unsigned location_1_start, unsigned location_1_end, unsigned location_2_start,
                                       unsigned location_2_end) {
-        node* curr = head;
+        node* tempA = head;
         if(location_1_start > location_2_start && location_1_start > location_2_end){
             int start = location_1_start;
             int end = location_1_end;
@@ -317,106 +333,106 @@ namespace lab6 {
         }
         int count = 0;
         while(count != location_1_start){
-            curr = curr->next;
+            tempA = tempA->next;
             count++;
         }
-        node* A = curr;
+        node* tempB = tempA;
         while(count != location_1_end){
-            A = A->next;
+            tempB = tempB->next;
             count++;
         }
-        node* B = A;
+        node* tempC = tempB;
         while(count != location_2_start){
-            B = B->next;
+            tempC = tempC->next;
             count++;
         }
-        node* C = B;
+        node* tempD = tempC;
         while(count != location_2_end){
-            C = C->next;
+            tempD = tempD->next;
             count++;
         }
-        node* currPrev = curr->prev;
-        node* Anext = A->next;
-        node* Bprev = B->prev;
-        node* Cnext = C->next;
+        node* tempAprev = tempA->prev;
+        node* tempAnext = tempB->next;
+        node* tempBprev = tempC->prev;
+        node* tempCnext = tempD->next;
 
-        if (currPrev != nullptr && Cnext != nullptr && Bprev == A){
-            currPrev->next = B;
-            B->prev = currPrev;
-            C->next = curr;
-            curr->prev = C;
-            A->next = Cnext;
-            Cnext->prev = A;
+        if (tempAprev != nullptr && tempCnext != nullptr && tempBprev == tempB){
+            tempAprev->next = tempC;
+            tempC->prev = tempAprev;
+            tempD->next = tempA;
+            tempA->prev = tempD;
+            tempB->next = tempCnext;
+            tempCnext->prev = tempB;
         }
-        else if(currPrev == nullptr && Cnext != nullptr){                       //edge case for swapping set with head and another set that does not have a tail
-            if(Anext == C || Bprev == C){
-               B->prev = nullptr;
-                C->next = curr;
-                curr->prev = C;
-                A->next = Cnext;
-                Cnext->prev = C;
-                head = B;
+        else if(tempAprev == nullptr && tempCnext != nullptr){                       //edge case for swapping set with head and another set that does not have a tail
+            if(tempAnext == tempD || tempBprev == tempD){
+               tempC->prev = nullptr;
+                tempD->next = tempA;
+                tempA->prev = tempD;
+                tempB->next = tempCnext;
+                tempCnext->prev = tempD;
+                head = tempC;
             }
             else{
-                B->prev = nullptr;
-                C->next = Anext;
-                Anext->prev = C;
-                Bprev->next = curr;
-                curr->prev = Bprev;
-                A->next = Cnext;
-                Cnext->prev = A;
-                head = B;
+                tempC->prev = nullptr;
+                tempD->next = tempAnext;
+                tempAnext->prev = tempD;
+                tempBprev->next = tempA;
+                tempA->prev = tempBprev;
+                tempB->next = tempCnext;
+                tempCnext->prev = tempB;
+                head = tempC;
             }
         }
-        else if(currPrev != nullptr && Cnext == nullptr){                       //edge case for swapping a set with tail and a set that does not have a head
-            if(Bprev == A){
-                currPrev->next = B;
-                B->prev = currPrev;
-                C->next = curr;
-                A->prev = C;
-                A->next = nullptr;
-                tail = A;
+        else if(tempAprev != nullptr && tempCnext == nullptr){                       //edge case for swapping a set with tail and a set that does not have a head
+            if(tempBprev == tempB){
+                tempAprev->next = tempC;
+                tempC->prev = tempAprev;
+                tempD->next = tempA;
+                tempB->prev = tempD;
+                tempB->next = nullptr;
+                tail = tempB;
             }
             else{
-                currPrev->next = B;
-                B->prev = currPrev;
-                C->next = Anext;
-                Anext->prev = C;
-                Bprev->next = curr;
-                curr->prev = Bprev;
-                A->next = nullptr;
-                tail = A;
+                tempAprev->next = tempC;
+                tempC->prev = tempAprev;
+                tempD->next = tempAnext;
+                tempAnext->prev = tempD;
+                tempBprev->next = tempA;
+                tempA->prev = tempBprev;
+                tempB->next = nullptr;
+                tail = tempB;
             }
         }
-        else if(currPrev == nullptr && Cnext == nullptr){
-            if(Bprev == A){
-                B->prev = nullptr;
-                C->next = curr;
-                curr->prev = C;
-                A->next = nullptr;
-                head = B;
-                tail = A;
+        else if(tempAprev == nullptr && tempCnext == nullptr){
+            if(tempBprev == tempB){
+                tempC->prev = nullptr;
+                tempD->next = tempA;
+                tempA->prev = tempD;
+                tempB->next = nullptr;
+                head = tempC;
+                tail = tempB;
             }
             else{
-                B->prev = nullptr;
-                C->next = Anext;
-                Anext->prev = C;
-                Bprev->next = curr;
-                curr->prev = Bprev;
-                A->next = nullptr;
-                head = B;
-                tail = A;
+                tempC->prev = nullptr;
+                tempD->next = tempAnext;
+                tempAnext->prev = tempD;
+                tempBprev->next = tempA;
+                tempA->prev = tempBprev;
+                tempB->next = nullptr;
+                head = tempC;
+                tail = tempB;
             }
         }
         else{
-            currPrev->next = B;
-            B->prev = currPrev;
-            C->next = Anext;
-            Anext->prev = C;
-            Bprev->next = curr;
-            curr->prev = Bprev;
-            A->next = Cnext;
-            Cnext->prev = A;
+            tempAprev->next = tempC;
+            tempC->prev = tempAprev;
+            tempD->next = tempAnext;
+            tempAnext->prev = tempD;
+            tempBprev->next = tempA;
+            tempA->prev = tempBprev;
+            tempB->next = tempCnext;
+            tempCnext->prev = tempB;
         }
     }
 
@@ -459,37 +475,43 @@ namespace lab6 {
     }
 
     doubly_linked_list& doubly_linked_list::operator=(const doubly_linked_list &rhs) {
-    doubly_linked_list new_list(rhs);
+        while(!this->is_empty()){
+            this->remove(0);
+        }
+        node* copy = rhs.head;
+        while(copy != nullptr){
+            this->append(copy->get_data());
+            copy = copy->next;
+        }
         return *this;
     }
 
     doubly_linked_list& doubly_linked_list::operator+=(const doubly_linked_list &rhs) {
-        doubly_linked_list left;
         node *rhs_temp = rhs.head;
         while(rhs_temp != nullptr){
-            left.append(rhs_temp->get_data());
+            this->append(rhs_temp->get_data());
             rhs_temp = rhs_temp->next;
         }
         return *this;
     }
 
-//    bool doubly_linked_list::operator==(const doubly_linked_list &rhs) {
-//    node* current = head;
-//    node* right = rhs.head;
-//        if (this->size() != rhs.size()){                 //objects are different sizes therefore not equal
-//            return false;
-//        }
-//        else{
-//            while(current){
-//                if(current->get_data() != right->get_data()){       //objects have the same data at the same locations
-//                    return false;
-//                }
-//                current = current->next;
-//                right = right->next;
-//            }
-//            return true;
-//        }
-//    }
+    bool doubly_linked_list::operator==(const doubly_linked_list &rhs) {
+    node* current = head;
+    node* right = rhs.head;
+        if (this->size() != rhs.size()){                 //objects are different sizes therefore not equal
+            return false;
+        }
+        else{
+            while(current){
+                if(current->get_data() != right->get_data()){       //objects have the same data at the same locations
+                    return false;
+                }
+                current = current->next;
+                right = right->next;
+            }
+            return true;
+        }
+    }
 
     std::ostream &operator<<(std::ostream &stream, doubly_linked_list &RHS) {
         node* current = RHS.head;

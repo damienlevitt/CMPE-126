@@ -203,48 +203,48 @@ TEST_F(Lab06Fixture, op_plus_op_plus_eq_test) {
 }
 
 
-//TEST_F(Lab06Fixture, compare_op_test) {
-//    for (int i = 0; i < 100; ++i) {
-//        dll_UT->append(i);
-//    }
-//    EXPECT_TRUE(*dll_UT==*dll_UT);
-//
-//    lab6::doubly_linked_list * comp_list = new lab6::doubly_linked_list;
-//
-//    for (int i = 0; i < 100; ++i) {
-//        comp_list->append(dll_UT->get_data(i));
-//    }
-//    EXPECT_TRUE(*dll_UT == *comp_list);
-//    delete comp_list;
-//    comp_list = new lab6::doubly_linked_list;
-//
-//
-//    for (int i = 0; i < 100; ++i) {
-//        comp_list->append(dll_UT->get_data(99-i));
-//    }
-//    EXPECT_FALSE(*dll_UT == *comp_list);
-//
-//    delete comp_list;
-//    comp_list = new lab6::doubly_linked_list;
-//
-//
-//    for (int i = 0; i < 50; ++i) {
-//        comp_list->append(dll_UT->get_data(i));
-//    }
-//    EXPECT_FALSE(*dll_UT == *comp_list);
-//
-//    delete comp_list;
-//    comp_list = new lab6::doubly_linked_list;
-//
-//
-//    for (int i = 0; i < 100; ++i) {
-//        comp_list->append(dll_UT->get_data(99-i));
-//    }
-//    for (int i = 100; i < 150; ++i) {
-//        comp_list->append(i);
-//    }
-//    EXPECT_FALSE(*dll_UT == *comp_list);
-//}
+TEST_F(Lab06Fixture, compare_op_test) {
+    for (int i = 0; i < 100; ++i) {
+        dll_UT->append(i);
+    }
+    EXPECT_TRUE(*dll_UT==*dll_UT);
+
+    lab6::doubly_linked_list * comp_list = new lab6::doubly_linked_list;
+
+    for (int i = 0; i < 100; ++i) {
+        comp_list->append(dll_UT->get_data(i));
+    }
+    EXPECT_TRUE(*dll_UT == *comp_list);
+    delete comp_list;
+    comp_list = new lab6::doubly_linked_list;
+
+
+    for (int i = 0; i < 100; ++i) {
+        comp_list->append(dll_UT->get_data(99-i));
+    }
+    EXPECT_FALSE(*dll_UT == *comp_list);
+
+    delete comp_list;
+    comp_list = new lab6::doubly_linked_list;
+
+
+    for (int i = 0; i < 50; ++i) {
+        comp_list->append(dll_UT->get_data(i));
+    }
+    EXPECT_FALSE(*dll_UT == *comp_list);
+
+    delete comp_list;
+    comp_list = new lab6::doubly_linked_list;
+
+
+    for (int i = 0; i < 100; ++i) {
+        comp_list->append(dll_UT->get_data(99-i));
+    }
+    for (int i = 100; i < 150; ++i) {
+        comp_list->append(i);
+    }
+    EXPECT_FALSE(*dll_UT == *comp_list);
+}
 
 
 TEST_F(Lab06Fixture, insertion_extraction_op_test) {
