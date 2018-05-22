@@ -3,6 +3,9 @@
 
 namespace lab7 {
     void clear(node *to_clear);
+    int recursive_level(node* top, int location);
+    void recursive_insert(node* top, int value);
+    node* find_node(node* top, int key);
 
     // Construct an empty tree
     tree::tree() {
@@ -22,17 +25,35 @@ namespace lab7 {
 
     // Insert
     void tree::insert(int value) {
+        if(root == nullptr){
+            root = new node(value);
+        }
+        else{
+            recursive_insert(root, value);                           //needs a recursive insertion case if the tree is not just one root.
+            }
+        }
 
-    }
 
     // Remove key return true if the key is deleted, and false if it isn't in the tree
     bool tree::remove(int key) {
-
+        if(in_tree(key)){
+            node *target = find_node(root, key);
+            if(target->frequency > 1){
+                target->frequency--;
+                return true;
+            }
+        }
+       // node* target_parent =
     }
 
     // What level is key on?
     int tree::level(int key) {
-
+       // node* top;
+        if(in_tree(key)){
+            return recursive_level(root, key);
+        }
+        else
+            return -1;
     }
 
     // Print the path to the key, starting with root
@@ -80,6 +101,51 @@ namespace lab7 {
     tree &tree::operator=(const tree &rhs) {
 
     }
+
+    //Auxiliary function implementations//
+    int recursive_level(node* top, int key){
+        if(top->data == key){
+            return 0;
+        }
+        else if(key < top->data){                                   //if key is less than top node data go left
+            return(recursive_level(top->left, key) + 1);
+        }
+        else if (key > top->data){                                  //if key is greater than top node data goes right
+            return(recursive_level(top->right, key) +1);
+        }
+    }
+
+    void recursive_insert(node* top, int value){
+        if(value < top->data){                                         //makes sure the smaller value goes left
+            if(top->left == nullptr){                               //if the top left node is null
+                top->left = new node(value);                        //inserts a new node at the location
+            }
+            else
+                recursive_insert(top->left, value);                 //otherwise recursively iterates to location and creates a new node
+        }
+        else if(value > top->data){                                 //larger data goes right
+            if(top->right == nullptr){
+                top->right = new node(value);
+            }
+            else
+                recursive_insert(top->right, value);
+        }
+        else if(value == top->data){                                   //edge case if the value equals the data of the top node
+            top->frequency++;
+        }
+    }
+        node* find_node(node* top, int key){
+            if(top->data == key){
+                return top;
+            }
+            else if(key < top->data){
+                return(find_node(top->left, key));
+            }
+            else if(key > top->data){
+                return(find_node(top->right, key));
+            }
+        }
+
 
     /**************************
      * Extra credit functions *

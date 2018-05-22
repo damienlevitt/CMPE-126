@@ -160,7 +160,7 @@ namespace lab6 {
             previous->next = current->next;
             current->next->prev = current->prev;
         }
-        else if(!previous){
+        else{
             head = current->next;
         }
         delete(current);
