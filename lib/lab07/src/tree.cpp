@@ -46,39 +46,44 @@ namespace lab7 {
 
     // Remove key return true if the key is deleted, and false if it isn't in the tree
     bool tree::remove(int key) {
-        if(!(in_tree(key))){
-            node* target = find_node(root, key);
-            if(target->frequency > 1){
+        if (!(in_tree(key))) {
+            return false;
+        }
+        else {
+            node *target = find_node(root, key);
+            if (target->frequency > 1) {
                 target->frequency--;
                 return true;
             }
-            node* target_parent = find_parent(root, target);
+            node *target_parent = find_parent(root, target);
             if (has_children(target)) {
                 node *target_swap = calc_swap(target);
                 node *parent_swap = find_parent(root, target_swap);
 
-                if (has_children(target_swap)) parent_swap->right = target_swap->left;
+                if (has_children(target_swap)) {
+                    parent_swap->right = target_swap->left;
+                }
                 else parent_swap->right = nullptr;
 
                 target_swap->left = target->left;
                 target_swap->right = target->right;
-                if(target_parent != nullptr) {
-                    if (target_parent->left == target) target_parent->left = target_swap;
+                if (target_parent != nullptr) {
+                    if (target_parent->left == target){
+                        target_parent->left = target_swap;
+                    }
                     else target_parent->right = target_swap;
                 }
                 else root = target_swap;
             }
             else {
-                if(target_parent != nullptr) {
+                if (target_parent != nullptr) {
                     if (target_parent->left == target) target_parent->left = nullptr;
                     else target_parent->right = nullptr;
-                }
-                else root = nullptr;
+                } else root = nullptr;
             }
             delete target;
             return true;
         }
-        else return false;
     }
 
     // What level is key on?
@@ -94,7 +99,9 @@ namespace lab7 {
 
     // Print the path to the key, starting with root
     void tree::path_to(int key) {
-        recursive_path_to(root, key);
+        if(in_tree(key)){
+            recursive_path_to(root, key);
+        }
     }
 
     // Number of items in the tree
@@ -160,7 +167,7 @@ namespace lab7 {
     }
 
     void recursive_insert(node* top, int value){
-        if(value < top->data){                                         //makes sure the smaller value goes left
+        if(value < top->data){                                      //makes sure the smaller value goes left
             if(top->left == nullptr){                               //if the top left node is null
                 top->left = new node(value);                        //inserts a new node at the location
             }
@@ -235,11 +242,9 @@ namespace lab7 {
             else recursive_path_to(top->right, key);
         }
         else{
-            if(top->data == key){
                 std::cout << std::endl;
                 return;
             }
-        }
     }
 
     unsigned recursive_size(node* top){
@@ -276,18 +281,16 @@ namespace lab7 {
     }
 
     int recursive_frequency(node* top, int key){
-        if (top == nullptr){
-            return 0;
+        if (top != nullptr) {
+            if (top->data == key) {
+                return top->frequency;
+            } else if (key < top->data) {
+                return recursive_frequency(top->left, key);
+            } else if (key > top->data) {
+                return recursive_frequency(top->right, key);
+            }
         }
-        else if(top->data == key){
-            return top->frequency;
-        }
-        else if(key < top->data){
-            return recursive_frequency(top->left, key);
-        }
-        else if(key > top->data){
-            return recursive_frequency(top->right, key);
-        }
+        else return 0;
     }
 
     void recursive_string(node* top, std::string &answer){

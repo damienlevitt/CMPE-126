@@ -132,7 +132,7 @@ TEST_F(Lab07Fixture, print)
     testing::internal::CaptureStdout();
     built_tree->print();
     output = testing::internal::GetCapturedStdout();
-    EXPECT_EQ(output, std::string("1 2 3 4 4 4 4 5 6 7 8 9 10 11 11 12 13 14 15 16 16 17 18 19 20 22 \n"));
+    EXPECT_EQ(output, std::string("1 2 3 4 4 4 4 5 6 7 8 9 10 11 11 12 13 14 15 16 16 17 18 19 20 22 \n"));     //actual is the same as the expected string, but for some reason the line above alters the expected output.
 }
 
 TEST_F(Lab07Fixture, remove_mult)
