@@ -12,6 +12,10 @@ namespace lab7 {
     unsigned recursive_size(node* top);
     unsigned recursive_depth(node* top);
     bool recursive_in_tree(node* top, int key);
+    int recursive_frequency(node* top, int key);
+    void recursive_string(node* top, std::string &answer);
+    void recursive_print(node* top);
+    node* node_copy(node* top);
 
 
     // Construct an empty tree
@@ -80,11 +84,12 @@ namespace lab7 {
     // What level is key on?
     int tree::level(int key) {
        // node* top;
-        if(in_tree(key)){
+        if(!(in_tree(key))){
+            return -1;
+        }
+        else{
             return recursive_level(root, key);
         }
-        else
-            return -1;
     }
 
     // Print the path to the key, starting with root
@@ -94,56 +99,64 @@ namespace lab7 {
 
     // Number of items in the tree
     unsigned tree::size() {
-        recursive_size(root);
+        return recursive_size(root);
     }
 
     // Calculate the depth of the tree, longest string of connections
     unsigned tree::depth() {
-        recursive_depth(root);
+        if(!(size() <= 1)){
+            return recursive_depth(root) - 1;
+        }
+        else return 0;
     }
 
     // Determine whether the given key is in the tree
     bool tree::in_tree(int key) {
-        recursive_in_tree(root, key);
+       return recursive_in_tree(root, key);
     }
 
     // Return the number of times that value is in the tree
     int tree::get_frequency(int key) {
-
+        return recursive_frequency(root, key);
     }
 
     // Return a string of all of the elements in the tree in order
     std::string tree::to_string() {
-
+        auto answer = std::string();
+        recursive_string(root, answer);
+        return answer;
     }
 
     //Use the to string function for the following two functions
     // Print the tree least to greatest, Include duplicates
     void tree::print() {
-
+        recursive_print(root);
+        std::cout << std::endl;
     }
 
     // Print the tree least to greatest, Include duplicates
     std::ostream &operator<<(std::ostream &stream, tree &RHS) {
-
+        stream << RHS.to_string();
+        return stream;
     }
 
     // Operator= Overload. Allowing for copying of trees
     tree &tree::operator=(const tree &rhs) {
-
+        this->root = node_copy(rhs.root);
+        this->tree_size = rhs.tree_size;
     }
 
     //Auxiliary function implementations//
-    int recursive_level(node* top, int location){
-        if(top->data == location){
-            return 0;
+    int recursive_level(node* top, int location) {
+        if (top->data != location) {
+            if (location < top->data) {                                   //if location is less than top node data go left
+                return (recursive_level(top->left, location) + 1);
+            }
+            else if (location > top->data) {                                  //if location is greater than top node data goes right
+                return (recursive_level(top->right, location) + 1);
+            }
         }
-        else if(location < top->data){                                   //if location is less than top node data go left
-            return(recursive_level(top->left, location) + 1);
-        }
-        else if (location > top->data){                                  //if location is greater than top node data goes right
-            return(recursive_level(top->right, location) +1);
-        }
+        else return 0;
     }
 
     void recursive_insert(node* top, int value){
@@ -237,31 +250,76 @@ namespace lab7 {
             return 0;
     }
 
-    unsigned recursive_depth(node* top){
-        if(top == nullptr){
+    unsigned recursive_depth(node* top) {
+        if (top != nullptr) {
+            unsigned left = 0;
+            unsigned right = 0;
+            left = 1 + recursive_depth(top->left);
+            right = 1 + recursive_depth(top->right);
+            if (right < left) {
+                return left;
+            } else return right;
+        }
+        else return 0;
+    }
+    bool recursive_in_tree(node* top, int key) {
+        if (top != nullptr) {
+            if (top->data == key) {
+                return true;
+            } else if (key < top->data) {
+                return recursive_in_tree(top->left, key);
+            } else if (key > top->data) {
+                return recursive_in_tree(top->right, key);
+            }
+        }
+        else return false;
+    }
+
+    int recursive_frequency(node* top, int key){
+        if (top == nullptr){
             return 0;
         }
-        unsigned left = 0;
-        unsigned right = 0;
-        left = 1 + recursive_depth(top->left);
-        right = 1 + recursive_depth(top->right);
-        if(right < left){
-            return left;
-        }
-        else return right;
-    }
-    bool recursive_in_tree(node* top, int key){
-        if(top->data == key){
-            return true;
+        else if(top->data == key){
+            return top->frequency;
         }
         else if(key < top->data){
-            return recursive_in_tree(top->left, key);
+            return recursive_frequency(top->left, key);
         }
         else if(key > top->data){
-            return recursive_in_tree(top->right, key);
+            return recursive_frequency(top->right, key);
         }
-        else
-            return false;
+    }
+
+    void recursive_string(node* top, std::string &answer){
+        if(top != nullptr){
+            recursive_string(top->left, answer);
+            for(int i = 0; i < top->frequency; i++){
+                answer += std::to_string(top->data);
+                answer += " ";
+            }
+        }
+        else return;
+    }
+
+    void recursive_print(node* top){
+        if(top != nullptr) {
+            recursive_print(top->left);
+            for (int i = 0; i < top->frequency; i++) {
+                std::cout << top->data << " ";
+                recursive_print(top->right);
+            }
+        }
+        else return;
+    }
+
+    node* node_copy(node* top){
+        if(top){
+            node* temp = new node(top);
+            if(top->left) temp->left = node_copy(top->left);
+            if(top->right) temp->right = node_copy(top->right);
+            return temp;
+        }
+        else return top;
     }
     /**************************
      * Extra credit functions *

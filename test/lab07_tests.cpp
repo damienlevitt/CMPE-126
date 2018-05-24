@@ -64,7 +64,7 @@ TEST_F(Lab07Fixture, level)
     EXPECT_EQ(built_tree->level(20), 6);
     EXPECT_EQ(built_tree->level(3), 4);
     EXPECT_EQ(built_tree->level(11), 3);
-    EXPECT_EQ(built_tree->level(0), -1);
+/**/    EXPECT_EQ(built_tree->level(0), -1);
     EXPECT_EQ(built_tree->level(21), -1);
 }
 
